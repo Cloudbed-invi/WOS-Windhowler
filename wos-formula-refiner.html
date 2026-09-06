@@ -119,6 +119,17 @@
     <div class="card">
       <h2>📈 AI Model Curve</h2>
       <p style="font-size: 13px; color: var(--muted); margin-top:0;">Comparing the raw community screenshots (dots) against the exact ML formula (lines). Notice how the AI draws perfect lines through the noisy data!</p>
+            <div style="margin-bottom: 10px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+        <label style="font-size:13px; margin:0; color:var(--muted); font-weight:bold;">Zoom View:</label>
+        <select id="chartZoom" onchange="updateChartZoom()" style="padding:6px; font-size:13px; border-radius:4px; border:1px solid var(--border); background:#fff; color:var(--text); cursor:pointer;">
+          <option value="all">All Levels</option>
+          <option value="1-20">Levels 1 - 20</option>
+          <option value="21-30">Levels 21 - 30</option>
+          <option value="31-40">Levels 31 - 40</option>
+          <option value="41-50">Levels 41 - 50</option>
+          <option value="51-60">Levels 51 - 60</option>
+        </select>
+      </div>
       <div class="chart-container">
         <canvas id="curveChart"></canvas>
       </div>
@@ -297,6 +308,39 @@
     }
   }
 
+    function updateChartZoom() {
+    if (!chartInstance) return;
+    const val = document.getElementById('chartZoom').value;
+    
+    if (val === 'all') {
+      delete chartInstance.options.scales.x.min;
+      delete chartInstance.options.scales.x.max;
+      delete chartInstance.options.scales.y.max;
+    } else {
+      const parts = val.split('-');
+      const minX = parseInt(parts[0], 10);
+      const maxX = parseInt(parts[1], 10) + 0.99;
+      
+      chartInstance.options.scales.x.min = minX;
+      chartInstance.options.scales.x.max = maxX;
+      
+      // Auto-scale Y axis for the zoomed area
+      let maxY = 0;
+      const mlData = chartInstance.data.datasets[0].data;
+      const rawData = chartInstance.data.datasets[1].data;
+      
+      for(const d of mlData) { if(d.x >= minX && d.x <= maxX && d.y > maxY) maxY = d.y; }
+      for(const d of rawData) { if(d.x >= minX && d.x <= maxX && d.y > maxY) maxY = d.y; }
+      
+      if (maxY > 0) {
+        chartInstance.options.scales.y.max = maxY * 1.05; // 5% padding at top
+      } else {
+        delete chartInstance.options.scales.y.max;
+      }
+    }
+    chartInstance.update();
+  }
+
   function renderChart() {
     if (typeof RAW_DATA === 'undefined' || typeof EXACT_LEVELS === 'undefined') return;
 
@@ -362,3 +406,4 @@
 
 </body>
 </html>
+
