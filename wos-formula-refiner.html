@@ -44,7 +44,6 @@
   th { color: var(--muted); }
   .table-responsive { overflow-x: auto; }
 
-  /* Mobile tweaks */
   @media (max-width: 480px) {
     body { padding: 10px; }
     h1 { font-size: 22px; }
@@ -66,7 +65,7 @@
   <div class="formula-banner">
     <strong>How does it work?</strong><br>
     The game uses a strict linear formula for boss health, but the UI rounds the percentages. We use an AI model (Huber Regression) to bypass the UI errors and extract the exact formula:<br>
-    <br><code>Damage = Start_HP + (Percent × Window_Size)</code>
+    <br><code>Damage = Start_HP + (Percent &times; Window_Size)</code>
   </div>
 
   <div class="card">
@@ -102,11 +101,11 @@
           <tr><th>Level</th><th>Start HP (0%)</th><th>Window Size</th></tr>
         </thead>
         <tbody>
-          <!-- Populated by JS -->
         </tbody>
       </table>
     </div>
   </div>
+  
   <div class="card" style="text-align: center; margin-top: 30px; border-color: #e9ecef; background: #fdfdfd;">
     <h2 style="font-size: 17px; margin-bottom: 5px; color: var(--text);">📥 Download Data</h2>
     <p style="font-size: 13px; color: var(--muted);">Want to run your own analysis? <br><a href="data.csv" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: bold;">Download the raw data.csv here</a>.</p>
@@ -144,11 +143,11 @@
       const sortedKeys = Object.keys(EXACT_LEVELS).map(Number).sort((a,b)=>a-b);
       for (const lvl of sortedKeys) {
         const data = EXACT_LEVELS[lvl];
-        tbody.innerHTML += <tr>
-          <td><strong>\</strong></td>
-          <td>\</td>
-          <td>\</td>
-        </tr>;
+        tbody.innerHTML += `<tr>
+          <td><strong>${lvl}</strong></td>
+          <td>${fmt(data.start)}</td>
+          <td>${fmt(data.window)}</td>
+        </tr>`;
       }
     }
   });
@@ -160,24 +159,24 @@
     
     if (!lvl || isNaN(pct)) {
       box.style.display = 'block';
-      box.innerHTML = <div class="result-desc">Please enter both Level and Percentage.</div>;
+      box.innerHTML = `<div class="result-desc">Please enter both Level and Percentage.</div>`;
       return;
     }
 
-    if (EXACT_LEVELS[lvl]) {
+    if (typeof EXACT_LEVELS !== 'undefined' && EXACT_LEVELS[lvl]) {
       const data = EXACT_LEVELS[lvl];
       const damage = data.start + (pct * data.window);
       box.style.display = 'block';
-      box.innerHTML = 
-        <div class="result-title">\ Damage</div>
-        <div class="result-desc">Using exact ML formula for Level \.<br>Start: \ | Window: \</div>
-      ;
+      box.innerHTML = `
+        <div class="result-title">${fmt(damage)} Damage</div>
+        <div class="result-desc">Using exact ML formula for Level ${lvl}.<br>Start: ${fmt(data.start)} | Window: ${fmt(data.window)}</div>
+      `;
     } else {
       box.style.display = 'block';
-      box.innerHTML = 
+      box.innerHTML = `
         <div class="result-title" style="color: #e67e22;">Formula Missing</div>
-        <div class="result-desc">We haven't solved Level \ yet. Ask an admin to upload screenshots for this level into the ML pipeline!</div>
-      ;
+        <div class="result-desc">We haven't solved Level ${lvl} yet. Ask an admin to upload screenshots for this level into the ML pipeline!</div>
+      `;
     }
   }
 
@@ -188,11 +187,10 @@
 
     if (isNaN(dmg)) {
       box.style.display = 'block';
-      box.innerHTML = <div class="result-desc">Please enter a valid damage number.</div>;
+      box.innerHTML = `<div class="result-desc">Please enter a valid damage number.</div>`;
       return;
     }
 
-    // Find the exact level where this damage fits
     let foundLvl = null;
     let foundPct = 0;
 
@@ -211,20 +209,19 @@
 
     box.style.display = 'block';
     if (foundLvl !== null) {
-      box.innerHTML = 
-        <div class="result-title">Level \ at \%</div>
+      box.innerHTML = `
+        <div class="result-title">Level ${foundLvl} at ${(foundPct * 100).toFixed(1)}%</div>
         <div class="result-desc">Based on the exact ML formula.</div>
-      ;
+      `;
     } else {
       box.style.display = 'block';
-      box.innerHTML = 
+      box.innerHTML = `
         <div class="result-title" style="color: #e67e22;">Cannot Predict Exact Level</div>
         <div class="result-desc">This damage falls into a gap between levels we haven't fully solved yet!</div>
-      ;
+      `;
     }
   }
 </script>
 
 </body>
 </html>
-
