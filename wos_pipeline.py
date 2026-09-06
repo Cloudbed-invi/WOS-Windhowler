@@ -22,9 +22,8 @@ def run_ocr(progress_callback=None):
     image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
     total = len(image_files)
     
-    with open(csv_file, mode='w', newline='', encoding='utf-8') as f:
+    with open(csv_file, mode='a', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
-        writer.writeheader()
         
         for i, filename in enumerate(image_files):
             img_path = os.path.join("images", filename)
@@ -61,15 +60,13 @@ def run_ml_and_export():
     if not os.path.exists("data.csv"):
         return {}
         
-    df = pd.read_csv("data.csv")
+    df = pd.read_csv("data.csv").drop_duplicates(subset=['Level', 'Percent', 'Damage'])
     levels = df['Level'].unique()
     levels.sort()
     
     exact_formulas = {}
     if 1 not in levels:
         exact_formulas[1] = {"start": 0, "window": 24300}
-    if 25 not in levels:
-        exact_formulas[25] = {"start": 386739898, "window": 71536909}
     
     for lvl in levels:
         level_data = df[df['Level'] == lvl]
@@ -91,10 +88,13 @@ def run_ml_and_export():
             "window": round(window_size)
         }
         
-    # Generate timestamp
     last_updated = datetime.now().strftime("%B %d, %Y - %H:%M:%S")
+    raw_data = df[['Level', 'Percent', 'Damage', 'Name']].to_dict(orient='records')
     
-    js_content = f"const LAST_UPDATED = '{last_updated}';\nconst EXACT_LEVELS = " + json.dumps(exact_formulas, indent=2) + ";"
+    js_content = f"const LAST_UPDATED = '{last_updated}';\n"
+    js_content += "const EXACT_LEVELS = " + json.dumps(exact_formulas, indent=2) + ";\n"
+    js_content += "const RAW_DATA = " + json.dumps(raw_data, indent=2) + ";\n"
+    
     with open("exact_levels.js", "w", encoding="utf-8") as f:
         f.write(js_content)
         
@@ -102,6 +102,4 @@ def run_ml_and_export():
 
 if __name__ == "__main__":
     setup_folders()
-    if run_ocr():
-        run_ml_and_export()
-
+    run_ml_and_export()
