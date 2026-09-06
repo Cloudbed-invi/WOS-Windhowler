@@ -125,7 +125,8 @@
     <div class="card">
       <h2>📈 AI Model Curve</h2>
       <p style="font-size: 13px; color: var(--muted); margin-top:0;">Comparing the raw community screenshots (dots) against the exact ML formula (lines). Notice how the AI draws perfect lines through the noisy data!</p>
-            <div style="margin-bottom: 10px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
+      
+      <div style="margin-bottom: 10px; display: flex; justify-content: flex-end; align-items: center; gap: 8px;">
         <label style="font-size:13px; margin:0; color:var(--muted); font-weight:bold;">Zoom View:</label>
         <select id="chartZoom" onchange="updateChartZoom()" style="padding:6px; font-size:13px; border-radius:4px; border:1px solid var(--border); background:#fff; color:var(--text); cursor:pointer;">
           <option value="all">All Levels</option>
@@ -136,6 +137,7 @@
           <option value="51-60">Levels 51 - 60</option>
         </select>
       </div>
+      
       <div class="chart-container">
         <canvas id="curveChart"></canvas>
       </div>
@@ -200,7 +202,11 @@
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + tabId).classList.add('active');
-    event.currentTarget.classList.add('active');
+    
+    // Safely add active to the clicked button
+    if (event && event.currentTarget) {
+      event.currentTarget.classList.add('active');
+    }
     
     if (tabId === 'data' && !chartInstance) {
       renderChart();
@@ -219,7 +225,7 @@
         banner.style.display = 'block';
         const a = Math.round(EXTRAPOLATE_A).toLocaleString('en-US');
         const b = EXTRAPOLATE_B.toFixed(4);
-        document.getElementById('mlFormulaText').innerText = Start HP =  × Level^;
+        document.getElementById('mlFormulaText').innerText = `Start HP = ${a} × Level^${b}`;
       }
     }
 
@@ -230,12 +236,36 @@
     const tbody = document.querySelector('#solvedTable tbody');
     tbody.innerHTML = '';
     const showEst = document.getElementById('showEstimated').checked;
+    const searchVal = document.getElementById('tableSearch').value.trim();
+    
+    let minLvl = -1;
+    let maxLvl = 999;
+    let exactMatch = '';
+
+    if (searchVal) {
+      if (searchVal.includes('-')) {
+        const parts = searchVal.split('-');
+        minLvl = parseInt(parts[0]) || 0;
+        maxLvl = parseInt(parts[1]) || 999;
+      } else {
+        exactMatch = searchVal;
+      }
+    }
 
     if (typeof EXACT_LEVELS !== 'undefined') {
       const sortedKeys = Object.keys(EXACT_LEVELS).map(Number).sort((a,b)=>a-b);
       for (const lvl of sortedKeys) {
         const data = EXACT_LEVELS[lvl];
         if (!data.confirmed && !showEst) continue;
+        
+        // Filtering logic
+        if (searchVal) {
+          if (searchVal.includes('-')) {
+            if (lvl < minLvl || lvl > maxLvl) continue;
+          } else {
+            if (!lvl.toString().includes(exactMatch)) continue;
+          }
+        }
         
         const rowClass = data.confirmed ? '' : 'unconfirmed-bg unconfirmed';
         const flag = data.confirmed ? '' : '⚠️ ';
@@ -251,7 +281,8 @@
   }
 
   function calcDamage() {
-    const lvl = document.getElementById('pLevel').value;
+    const lvlStr = document.getElementById('pLevel').value;
+    const lvl = parseInt(lvlStr, 10);
     const pct = parseFloat(document.getElementById('pPercent').value) / 100.0;
     const box = document.getElementById('resDamage');
     
@@ -261,27 +292,42 @@
       return;
     }
 
+    let start = 0;
+    let window = 0;
+    let isConfirmed = false;
+    let isExtrapolated = false;
+
     if (typeof EXACT_LEVELS !== 'undefined' && EXACT_LEVELS[lvl]) {
       const data = EXACT_LEVELS[lvl];
-      const damage = data.start + (pct * data.window);
-      
-      let warnHtml = '';
-      if (!data.confirmed) {
-        warnHtml = `<br><span style="color:var(--warning); font-weight:bold;">⚠️ Note: Level ${lvl} is an AI estimation. We need more screenshots to confirm it!</span>`;
-      }
-
-      box.style.display = 'block';
-      box.innerHTML = `
-        <div class="result-title">${fmt(damage)} Damage</div>
-        <div class="result-desc">Using ML formula for Level ${lvl}.<br>Start: ${fmt(data.start)} | Window: ${fmt(data.window)} ${warnHtml}</div>
-      `;
+      start = data.start;
+      window = data.window;
+      isConfirmed = data.confirmed;
+      if (data.extrapolated) isExtrapolated = true;
+    } else if (typeof EXTRAPOLATE_A !== 'undefined' && typeof EXTRAPOLATE_B !== 'undefined') {
+      start = EXTRAPOLATE_A * Math.pow(lvl, EXTRAPOLATE_B);
+      const nextStart = EXTRAPOLATE_A * Math.pow(lvl + 1, EXTRAPOLATE_B);
+      window = nextStart - start;
+      isExtrapolated = true;
     } else {
       box.style.display = 'block';
-      box.innerHTML = `
-        <div class="result-title" style="color: #e67e22;">Formula Missing</div>
-        <div class="result-desc">We haven't calculated Level ${lvl} yet. Ask an admin to upload screenshots for this level into the ML pipeline!</div>
-      `;
+      box.innerHTML = `<div class="result-desc">Models failed to load.</div>`;
+      return;
     }
+
+    const damage = start + (pct * window);
+    
+    let warnHtml = '';
+    if (isExtrapolated) {
+      warnHtml = `<br><span style="color:var(--warning); font-weight:bold;">⚠️ Note: Level ${lvl} goes beyond our known data. This is a theoretical extrapolation based on the power law curve (margin of error is high).</span>`;
+    } else if (!isConfirmed) {
+      warnHtml = `<br><span style="color:var(--warning); font-weight:bold;">⚠️ Note: Level ${lvl} is an AI estimation. We need screenshots to mathematically confirm it.</span>`;
+    }
+
+    box.style.display = 'block';
+    box.innerHTML = `
+      <div class="result-title">${fmt(damage)} Damage</div>
+      <div class="result-desc">Start: ${fmt(start)} | Window: ${fmt(window)} ${warnHtml}</div>
+    `;
   }
 
   function calcLevel() {
@@ -298,6 +344,7 @@
     let foundLvl = null;
     let foundPct = 0;
     let isConfirmed = true;
+    let isExtrapolated = false;
 
     if (typeof EXACT_LEVELS !== 'undefined') {
       const sortedKeys = Object.keys(EXACT_LEVELS).map(Number).sort((a,b)=>a-b);
@@ -308,31 +355,46 @@
           foundLvl = lvl;
           foundPct = (dmg - data.start) / data.window;
           isConfirmed = data.confirmed;
+          if (data.extrapolated) isExtrapolated = true;
           break;
         }
       }
     }
 
+    if (foundLvl === null && typeof EXTRAPOLATE_A !== 'undefined' && typeof EXTRAPOLATE_B !== 'undefined') {
+      const approxLevelFloat = Math.pow(dmg / EXTRAPOLATE_A, 1 / EXTRAPOLATE_B);
+      const lvl = Math.floor(approxLevelFloat);
+      
+      const start = EXTRAPOLATE_A * Math.pow(lvl, EXTRAPOLATE_B);
+      const nextStart = EXTRAPOLATE_A * Math.pow(lvl + 1, EXTRAPOLATE_B);
+      const window = nextStart - start;
+      
+      foundLvl = lvl;
+      foundPct = (dmg - start) / window;
+      isConfirmed = false;
+      isExtrapolated = true;
+    }
+
     box.style.display = 'block';
     if (foundLvl !== null) {
       let warnHtml = '';
-      if (!isConfirmed) {
+      if (isExtrapolated) {
+        warnHtml = `<br><span style="color:var(--warning); font-weight:bold;">⚠️ Note: This goes beyond known data. It's a theoretical extrapolation based on the power law curve (margin of error is high).</span>`;
+      } else if (!isConfirmed) {
         warnHtml = `<br><span style="color:var(--warning); font-weight:bold;">⚠️ Note: This relies on an AI estimation for Level ${foundLvl}.</span>`;
       }
+      
       box.innerHTML = `
         <div class="result-title">Level ${foundLvl} at ${(foundPct * 100).toFixed(1)}%</div>
         <div class="result-desc">Based on the ML formula. ${warnHtml}</div>
       `;
     } else {
       box.style.display = 'block';
-      box.innerHTML = `
-        <div class="result-title" style="color: #e67e22;">Cannot Predict Exact Level</div>
-        <div class="result-desc">This damage falls into a gap between levels we haven't fully solved yet!</div>
-      `;
+      box.innerHTML = `<div class="result-desc">Failed to calculate level.</div>`;
     }
   }
 
-    function updateChartZoom() {
+  function updateChartZoom() {
     if (!chartInstance) return;
     const val = document.getElementById('chartZoom').value;
     
@@ -348,7 +410,6 @@
       chartInstance.options.scales.x.min = minX;
       chartInstance.options.scales.x.max = maxX;
       
-      // Auto-scale Y axis for the zoomed area
       let maxY = 0;
       const mlData = chartInstance.data.datasets[0].data;
       const rawData = chartInstance.data.datasets[1].data;
@@ -357,7 +418,7 @@
       for(const d of rawData) { if(d.x >= minX && d.x <= maxX && d.y > maxY) maxY = d.y; }
       
       if (maxY > 0) {
-        chartInstance.options.scales.y.max = maxY * 1.05; // 5% padding at top
+        chartInstance.options.scales.y.max = maxY * 1.05; 
       } else {
         delete chartInstance.options.scales.y.max;
       }
@@ -430,8 +491,3 @@
 
 </body>
 </html>
-
-
-
-
-
