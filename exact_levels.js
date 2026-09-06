@@ -1,4 +1,6 @@
-const LAST_UPDATED = 'September 06, 2026 - 23:34:24';
+const LAST_UPDATED = 'September 06, 2026 - 23:46:36';
+const EXTRAPOLATE_A = 844.19425636015;
+const EXTRAPOLATE_B = 4.087798284547618;
 const EXACT_LEVELS = {
   "1": {
     "start": 0,
@@ -226,18 +228,18 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "46": {
-    "start": 5280296343,
-    "window": 485743214,
+    "start": 5276310104,
+    "window": 479099484,
     "confirmed": false
   },
   "47": {
-    "start": 5766039557,
-    "window": 511974421,
+    "start": 5755409588,
+    "window": 510645674,
     "confirmed": false
   },
   "48": {
-    "start": 6278013977,
-    "window": 535297801,
+    "start": 6266055262,
+    "window": 547256516,
     "confirmed": false
   },
   "49": {
@@ -246,9 +248,70 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "50": {
-    "start": 7365872027,
-    "window": 566135539,
-    "confirmed": false
+    "start": 7438563286,
+    "window": 627188067,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "51": {
+    "start": 8065751352,
+    "window": 666332901,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "52": {
+    "start": 8732084253,
+    "window": 707097202,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "53": {
+    "start": 9439181455,
+    "window": 749515207,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "54": {
+    "start": 10188696661,
+    "window": 793621207,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "55": {
+    "start": 10982317868,
+    "window": 839449553,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "56": {
+    "start": 11821767421,
+    "window": 887034648,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "57": {
+    "start": 12708802069,
+    "window": 936410952,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "58": {
+    "start": 13645213022,
+    "window": 987612978,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "59": {
+    "start": 14632826000,
+    "window": 1040675291,
+    "confirmed": false,
+    "extrapolated": true
+  },
+  "60": {
+    "start": 15673501291,
+    "window": 1095632508,
+    "confirmed": false,
+    "extrapolated": true
   }
 };
 const RAW_DATA = [

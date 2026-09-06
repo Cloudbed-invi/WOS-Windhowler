@@ -7,10 +7,14 @@ import numpy as np
 from datetime import datetime
 from sklearn.linear_model import HuberRegressor
 from scipy.interpolate import PchipInterpolator
+from scipy.optimize import curve_fit
 
 def setup_folders():
     if not os.path.exists("images"):
         os.makedirs("images")
+
+def power_law(x, a, b):
+    return a * np.power(x, b)
 
 def run_ml_and_export():
     if not os.path.exists("data.csv"):
@@ -45,21 +49,22 @@ def run_ml_and_export():
             "confirmed": True
         }
     
-    # Interpolate missing levels
-    known_levels = sorted(list(exact_formulas.keys()))
-    known_starts = [exact_formulas[l]["start"] for l in known_levels]
+    known_levels = np.array(sorted(list(exact_formulas.keys())))
+    known_starts = np.array([exact_formulas[l]["start"] for l in known_levels])
     
-    # We must add an artificial anchor at the end so interpolation works up to level 60
-    if known_levels[-1] < 60:
-        known_levels.append(60)
-        # extrapolate the last window roughly
-        last_window = exact_formulas[known_levels[-2]]["window"]
-        known_starts.append(known_starts[-1] + (last_window * 1.1 * (60 - known_levels[-2])))
-        
+    # Fit power law for infinite extrapolation
+    fit_L = known_levels[known_levels > 1]
+    fit_S = known_starts[known_levels > 1]
+    popt, _ = curve_fit(power_law, fit_L, fit_S, maxfev=10000)
+    extrapolate_A = popt[0]
+    extrapolate_B = popt[1]
+    
+    # Interpolate missing levels up to max known (e.g., 49)
+    max_known = known_levels[-1]
     interp = PchipInterpolator(known_levels, known_starts)
     
     all_levels = {}
-    for lvl in range(1, 51):
+    for lvl in range(1, max_known + 1):
         if lvl in exact_formulas:
             all_levels[lvl] = exact_formulas[lvl]
         else:
@@ -70,11 +75,24 @@ def run_ml_and_export():
                 "window": round(next_start - start),
                 "confirmed": False
             }
+            
+    # Add a few extrapolated levels up to 60 for the table view
+    for lvl in range(max_known + 1, 61):
+        start = power_law(lvl, extrapolate_A, extrapolate_B)
+        next_start = power_law(lvl + 1, extrapolate_A, extrapolate_B)
+        all_levels[lvl] = {
+            "start": round(start),
+            "window": round(next_start - start),
+            "confirmed": False,
+            "extrapolated": True
+        }
         
     last_updated = datetime.now().strftime("%B %d, %Y - %H:%M:%S")
     raw_data = df[['Level', 'Percent', 'Damage', 'Name']].to_dict(orient='records')
     
     js_content = f"const LAST_UPDATED = '{last_updated}';\n"
+    js_content += f"const EXTRAPOLATE_A = {extrapolate_A};\n"
+    js_content += f"const EXTRAPOLATE_B = {extrapolate_B};\n"
     js_content += "const EXACT_LEVELS = " + json.dumps(all_levels, indent=2) + ";\n"
     js_content += "const RAW_DATA = " + json.dumps(raw_data, indent=2) + ";\n"
     
