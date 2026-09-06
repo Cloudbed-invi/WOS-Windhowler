@@ -2,687 +2,155 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Windhowler Log</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Windhowler Predictor</title>
 <script src="exact_levels.js"></script>
 <style>
   :root {
-    --paper: #eef2f4;
-    --ink: #1e2a33;
-    --muted: #5b6b74;
-    --accent: #2b6e8f;
-    --accent-light: #e4eef2;
-    --line: #c9d3d8;
-    --warn: #a15c2a;
-    --warn-light: #f3e6da;
-    --danger: #a5342f;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #2c3e50;
+    --muted: #6c757d;
+    --primary: #3498db;
+    --border: #e9ecef;
+    --success: #2ecc71;
   }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-  .page {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 32px 20px 60px;
-  }
-  h1 {
-    font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
-    font-size: 26px;
-    font-weight: 400;
-    margin: 0 0 4px;
-    color: var(--ink);
-  }
-  .tagline {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 22px;
-  }
-  .formula-banner {
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--accent);
-    padding: 12px 14px;
-    margin-bottom: 20px;
-    background: #fff;
-  }
-  .formula-banner .f-main {
-    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
-    font-size: 15px;
-    color: var(--accent);
-  }
-  .formula-banner .f-sub {
-    color: var(--muted);
-    font-size: 12.5px;
-    margin-top: 3px;
-  }
-  .tabs {
-    display: flex;
-    gap: 22px;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 22px;
-  }
-  .tab-btn {
-    background: none;
-    border: none;
-    font-family: Georgia, serif;
-    font-size: 16px;
-    color: var(--muted);
-    padding: 8px 2px 10px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-  }
-  .tab-btn.active {
-    color: var(--ink);
-    border-bottom-color: var(--accent);
-  }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { margin: 0; padding: 20px 15px; background: var(--bg); color: var(--text); }
+  .container { max-width: 600px; margin: 0 auto; }
+  h1 { font-size: 24px; margin-bottom: 5px; text-align: center; }
+  .tagline { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  .timestamp { text-align: center; background: #eef2f5; color: var(--primary); font-size: 12px; padding: 6px 12px; border-radius: 20px; display: inline-block; margin: 0 auto 20px auto; font-weight: bold; }
+  .center-flex { display: flex; justify-content: center; }
+  
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  .card h2 { font-size: 18px; margin-top: 0; margin-bottom: 10px; color: var(--primary); }
+  .formula-banner { background: #fdfae5; border-left: 4px solid #f1c40f; padding: 12px 15px; border-radius: 4px; font-size: 14px; margin-bottom: 20px; line-height: 1.5;}
+  .formula-banner code { font-family: monospace; font-size: 15px; font-weight: bold; color: #d35400;}
 
-  section { margin-bottom: 28px; }
-  section h2 {
-    font-family: Georgia, serif;
-    font-weight: 400;
-    font-size: 17px;
-    margin: 0 0 4px;
-    color: var(--ink);
-  }
-  section .hint {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-  hr.divider {
-    border: none;
-    border-top: 1px dashed var(--line);
-    margin: 28px 0;
-  }
+  .input-group { margin-bottom: 15px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 5px; font-weight: bold;}
+  input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 16px; transition: border-color 0.2s;}
+  input:focus { outline: none; border-color: var(--primary); }
+  button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
+  button:hover { opacity: 0.9; }
 
-  label {
-    display: block;
-    font-size: 12.5px;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-  input[type=text], input[type=number], textarea {
-    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
-    font-size: 14px;
-    color: var(--ink);
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 3px;
-    padding: 8px 10px;
-    width: 100%;
-  }
-  textarea { min-height: 110px; resize: vertical; }
-  .field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-  .field-row .field { flex: 1; min-width: 110px; }
+  .result-box { margin-top: 15px; padding: 15px; background: #f8fbff; border: 1px solid #cce0ff; border-radius: 6px; display: none; }
+  .result-title { font-size: 22px; font-weight: bold; color: var(--primary); margin-bottom: 5px;}
+  .result-desc { font-size: 13px; color: var(--muted); line-height: 1.4;}
 
-  button {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 13.5px;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 9px 16px;
-    cursor: pointer;
-  }
-  button:hover { filter: brightness(1.08); }
-  button.quiet {
-    background: none;
-    color: var(--muted);
-    border: 1px solid var(--line);
-  }
-  button.danger-text {
-    background: none;
-    color: var(--danger);
-    border: 1px solid var(--line);
-  }
-  .parse-feedback {
-    font-size: 12.5px;
-    color: var(--muted);
-    margin-top: 8px;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); }
+  .table-responsive { overflow-x: auto; }
 
-  .result-block {
-    border: 1px solid var(--line);
-    background: #fff;
-    padding: 14px 16px;
-    margin-top: 14px;
-  }
-  .result-headline {
-    font-family: Georgia, serif;
-    font-size: 20px;
-    color: var(--ink);
-  }
-  .result-context {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-  .result-ranges {
-    margin-top: 12px;
-    padding-top: 10px;
-    border-top: 1px dashed var(--line);
-    font-size: 13px;
-  }
-  .result-ranges .range-line { margin-top: 3px; }
-  .deviation-note {
-    margin-top: 10px;
-    font-size: 12.5px;
-    color: var(--warn);
-  }
-  .deviation-note.ok { color: var(--muted); }
-
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td {
-    text-align: left;
-    padding: 6px 8px;
-    border-bottom: 1px solid var(--line);
-  }
-  th { color: var(--muted); font-weight: 400; font-size: 12px; }
-  td.num, th.num { font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace; }
-  td.dev-high { color: var(--warn); }
-  .del-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 15px;
-    padding: 0 4px;
-  }
-  .del-btn:hover { color: var(--danger); }
-  .empty-note {
-    color: var(--muted);
-    font-size: 13px;
-    padding: 10px 0;
-  }
-  .storage-note {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 30px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line);
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    h1 { font-size: 22px; }
+    .card { padding: 15px; }
+    button { padding: 14px; }
   }
 </style>
 </head>
 <body>
-<div class="page">
-  <h1>Windhowler Log</h1>
-  <div class="tagline">Tracking the Endless Trial level formula, one battle report at a time.</div>
 
-    <div class="formula-banner">
-    <div class="f-main" id="formulaMain">Formula: Damage = Start + (Percent &times; Window)</div>
-    <div class="f-sub" id="formulaSub">Using Exact Huber ML Windows where available, falling back to curve estimation.</div>
-  </div>
-    <div class="f-sub" id="formulaSub"></div>
+<div class="container">
+  <h1>🐺 Windhowler Predictor</h1>
+  <div class="tagline">Calculates exact Boss HP based on machine learning.</div>
+  
+  <div class="center-flex">
+    <div class="timestamp" id="ts-badge">Loading...</div>
   </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="predict">Predict</button>
-    <button class="tab-btn" data-tab="data">Data</button>
+  <div class="formula-banner">
+    <strong>How does it work?</strong><br>
+    The game uses a strict linear formula for boss health, but the UI rounds the percentages. We use an AI model (Huber Regression) to bypass the UI errors and extract the exact formula:<br>
+    <br><code>Damage = Start_HP + (Percent × Window_Size)</code>
   </div>
 
-  <div class="tab-panel active" id="tab-predict">
-
-    <section>
-      <h2>From a level</h2>
-      <div class="hint">Enter a level and progress percent, get the expected damage.</div>
-      <div class="field-row">
-        <div class="field"><label>Level</label><input type="number" id="predLevel" placeholder="42"></div>
-        <div class="field"><label>Progress %</label><input type="number" id="predPct" placeholder="6"></div>
-      </div>
-      <button id="predictDamageBtn">Predict damage</button>
-      <div class="result-block" id="damageResult" style="display:none;"></div>
-    </section>
-
-    <hr class="divider">
-
-    <section>
-      <h2>From a damage number</h2>
-      <div class="hint">Paste a damage total, get the level and progress it lands on.</div>
-      <div class="field-row">
-        <div class="field"><label>Damage dealt</label><input type="text" id="predDamage" placeholder="3,681,348,810"></div>
-      </div>
-      <button id="predictLevelBtn">Predict level</button>
-      <div class="result-block" id="levelResult" style="display:none;"></div>
-    </section>
-
+  <div class="card">
+    <h2>🎯 Predict Damage</h2>
+    <div class="input-group">
+      <label>Level</label>
+      <input type="number" id="pLevel" placeholder="e.g. 48" inputmode="numeric">
+    </div>
+    <div class="input-group">
+      <label>Percentage (%)</label>
+      <input type="number" id="pPercent" placeholder="e.g. 50" inputmode="numeric">
+    </div>
+    <button onclick="calcDamage()">Calculate Damage</button>
+    <div id="resDamage" class="result-box"></div>
   </div>
 
-  <div class="tab-panel" id="tab-data">
-
-    <section>
-      <h2>Add readings</h2>
-      <div class="hint">Paste one or more lines, roughly in the form "damage - percent% of level N". Odd spacing, capitalization, or a missing % or "Lv" won't stop it &mdash; it'll do its best and tell you what it couldn't read.</div>
-      <textarea id="input" placeholder="72,423,951 - 29% of trial lv. 17"></textarea>
-      <div class="field-row" style="margin-top:10px;">
-        <button id="addBtn">Add data</button>
-      </div>
-      <div class="parse-feedback" id="parseFeedback"></div>
-    </section>
-
-    <section>
-      <h2>Your data</h2>
-      <div class="hint" id="dataCount"></div>
-      <table id="rawTable">
-        <thead><tr><th>Damage</th><th>%</th><th>Level</th><th>Model says</th><th>Off by</th><th></th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="field-row" style="margin-top:14px;">
-        <button class="danger-text" id="clearBtn">Clear all data</button>
-      </div>
-    </section>
-
-    <section>
-      <h2>Solved levels</h2>
-      <div class="hint">Levels with two or more readings, so the exact start threshold and window size are known &mdash; not just estimated from the curve.</div>
+  <div class="card">
+    <h2>📊 Currently Solved Levels</h2>
+    <p style="font-size: 13px; color: var(--muted); margin-top:0;">These are the exact formulas calculated by the AI from community screenshots.</p>
+    <div class="table-responsive">
       <table id="solvedTable">
-        <thead><tr><th>Level</th><th>Start</th><th>End</th><th>Window size</th><th># readings</th></tr></thead>
-        <tbody></tbody>
+        <thead>
+          <tr><th>Level</th><th>Start HP (0%)</th><th>Window Size</th></tr>
+        </thead>
+        <tbody>
+          <!-- Populated by JS -->
+        </tbody>
       </table>
-    </section>
-
+    </div>
   </div>
 
-  <div class="storage-note" id="storageNote"></div>
 </div>
 
 <script>
+  // Format numbers with commas
+  const fmt = (num) => Math.round(num).toLocaleString('en-US');
 
-const STORAGE_KEY = 'wos_endless_trial_points_v2';
-
-const SEED_TEXT = `
-72,423,951 - 29% of trial lv. 17
-143,414,658 - 8% of trial lv 20
-173,418,819 - 1% of trial lv.21
-234,200,050 - 47% of trial lv 22
-290,435,970 - 47% of Trial lv 23
-303,502,935 - 70% of Trial Lv 23
-355,707,410 - 53% of Trial lv 24
-397,026,845 - 14% of trial lv. 25
-402,311,815 - 22% of Trial Lv. 25
-497,914,590 - 50% of Trial Lv. 26
-556,221,612 - 17% of Trial Lv. 27
-559,441,034 - 20% of Trial Lv. 27
-626,400,558 - 79% of Trial Lv. 27
-663,193,137 - 11% of Trial lv 28
-669,205,486 - 16% of Trial Lv. 28
-710,441,567 - 50% of Trial Lv 28
-811,950,970 - 30% of Trial Lv.29
-847,594,114 - 57% of Trial Lv. 29
-867,834,427 - 72% of Trial Lv. 29
-901,248,419 - 3% of Trial lv 30
-905,376,879 - 0% of Trial Lv 30
-912,977,123 - 5% of Trial Lv 30
-1,243,209,406 - 22% of Trial lv. 32
-1,812,831,025 - 25% of Lv. 35
-2,554,494,393 - 37% of Lv. 38
-2,799,865,740 - 27% of Trial lv 39
-2,909,355,975 - 65% of lv 39
-3,079,843,839 - 22% of Lv 40
-3,126,908,935 - 37% of Lv. 40
-3,136,414,860 - 40% of Lv. 40
-3,013,185,586 - 0% of Trial Lv. 40
-3,026,563,430 - 5% of Trial Lv 40
-3,546,430,572 - 67% of Trial Lv 41
-3,445,924,183 - 37% of Trial Lv 41
-3,681,348,810 - 6% of Trial Lv 42
-3,704,877,077 - 13% of Trial Lv 42
-11,934,638,223 - 2% of Trial lv. 56
-`;
-
-// ---------- storage: uses Claude's artifact storage when available, falls back to
-// this browser's localStorage when the file is downloaded and opened on its own ----------
-const hasClaudeStorage = typeof window.storage !== 'undefined' && window.storage && typeof window.storage.get === 'function';
-
-async function storageLoad() {
-  if (hasClaudeStorage) {
-    try {
-      const r = await window.storage.get(STORAGE_KEY, false);
-      return r ? r.value : null;
-    } catch (e) { return null; }
-  }
-  try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
-}
-
-async function storageSave(value) {
-  if (hasClaudeStorage) {
-    try { await window.storage.set(STORAGE_KEY, value, false); } catch (e) { console.error(e); }
-    return;
-  }
-  try { localStorage.setItem(STORAGE_KEY, value); } catch (e) { console.error(e); }
-}
-
-// ---------- forgiving parser ----------
-function parseLine(rawLine) {
-  let line = rawLine.trim();
-  if (!line) return null;
-
-  let pct = null;
-  const pctMatch = line.match(/(\d+(?:\.\d+)?)\s*%/);
-  if (pctMatch) {
-    pct = parseFloat(pctMatch[1]) / 100;
-    line = line.slice(0, pctMatch.index) + ' ' + line.slice(pctMatch.index + pctMatch[0].length);
-  }
-
-  let level = null;
-  const lvMatch = line.match(/(?:lv|lvl|level)\.?\s*#?\s*(\d{1,4})/i);
-  if (lvMatch) {
-    level = parseInt(lvMatch[1], 10);
-    line = line.slice(0, lvMatch.index) + ' ' + line.slice(lvMatch.index + lvMatch[0].length);
-  }
-
-  const numMatches = line.match(/\d[\d,\.]*\d|\d/g) || [];
-  const numbers = numMatches.map(s => parseFloat(s.replace(/,/g, ''))).filter(n => !isNaN(n));
-  if (numbers.length === 0) return null;
-
-  let damage = Math.max(...numbers);
-
-  if (pct === null) {
-    const smallCandidates = numbers.filter(n => n !== damage && n >= 0 && n <= 100);
-    if (smallCandidates.length > 0) pct = smallCandidates[0] / 100;
-  }
-  if (level === null) {
-    const remaining = numbers.filter(n => n !== damage);
-    const levelCandidates = remaining.filter(n => Number.isInteger(n) && n < 2000);
-    if (levelCandidates.length > 0) level = levelCandidates[levelCandidates.length - 1];
-  }
-
-  if (damage == null || level == null || pct == null) return null;
-  if (damage < 1000) return null;
-  return { damage: Math.round(damage), pct, level: Math.round(level) };
-}
-
-function makeId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
-
-function dedupeAndTag(points, existing) {
-  const seen = new Set(existing.map(p => p.damage + '_' + p.pct + '_' + p.level));
-  const out = [];
-  for (const p of points) {
-    const key = p.damage + '_' + p.pct + '_' + p.level;
-    if (!seen.has(key)) { seen.add(key); out.push({ ...p, id: makeId() }); }
-  }
-  return out;
-}
-
-// ---------- model fitting: S(z) = a * z^n ----------
-function computeC(z, pct, n) {
-  const zm1 = z - 1;
-  const a1 = zm1 <= 0 ? 0 : Math.pow(zm1, n);
-  const a2 = Math.pow(z, n);
-  return a1 + pct * (a2 - a1);
-}
-
-function evalN(points, n) {
-  const items = [];
-  for (const p of points) {
-    const C = computeC(p.level, p.pct, n);
-    if (C <= 0) return null;
-    items.push({ logDamage: Math.log(p.damage), logC: Math.log(C) });
-  }
-  const logA = items.reduce((s, it) => s + (it.logDamage - it.logC), 0) / items.length;
-  let sse = 0;
-  for (const it of items) {
-    const resid = it.logDamage - (logA + it.logC);
-    sse += resid * resid;
-  }
-  return { logA, sse };
-}
-
-function fitModel(points) {
-  if (points.length < 3) return null;
-  let bestN = null, bestLogA = null, bestSse = Infinity;
-  for (let n = 1.2; n <= 7.0; n += 0.02) {
-    const r = evalN(points, n);
-    if (r && r.sse < bestSse) { bestSse = r.sse; bestN = n; bestLogA = r.logA; }
-  }
-  const coarse = bestN;
-  for (let n = coarse - 0.02; n <= coarse + 0.02; n += 0.0005) {
-    const r = evalN(points, n);
-    if (r && r.sse < bestSse) { bestSse = r.sse; bestN = n; bestLogA = r.logA; }
-  }
-  const a = Math.exp(bestLogA);
-  const residualStd = Math.sqrt(bestSse / Math.max(points.length - 2, 1));
-  return { a, n: bestN, residualStd, count: points.length };
-}
-
-function S(z, fit) { return fit.a * Math.pow(Math.max(z, 0), fit.n); }
-
-function predictedFor(point, fit) {
-  if (EXACT_LEVELS[point.level]) {
-    const exact = EXACT_LEVELS[point.level];
-    return exact.start + point.pct * exact.window;
-  }
-  const s0 = S(point.level - 1, fit), s1 = S(point.level, fit);
-  return s0 + point.pct * (s1 - s0);
-}
-
-function solvedLevels(points) {
-  const byLevel = {};
-  for (const p of points) (byLevel[p.level] = byLevel[p.level] || []).push(p);
-  const solved = [];
-  for (const [lvlStr, pts] of Object.entries(byLevel)) {
-    const uniquePcts = new Set(pts.map(p => p.pct));
-    if (pts.length >= 2 && uniquePcts.size >= 2) {
-      const n = pts.length;
-      const sumP = pts.reduce((s, p) => s + p.pct, 0);
-      const sumD = pts.reduce((s, p) => s + p.damage, 0);
-      const sumPD = pts.reduce((s, p) => s + p.pct * p.damage, 0);
-      const sumPP = pts.reduce((s, p) => s + p.pct * p.pct, 0);
-      const denom = n * sumPP - sumP * sumP;
-      if (denom !== 0) {
-        const slope = (n * sumPD - sumP * sumD) / denom;
-        const intercept = (sumD - slope * sumP) / n;
-        solved.push({ level: parseInt(lvlStr, 10), start: intercept, window: slope, points: n });
+  // Load Timestamp
+  document.addEventListener("DOMContentLoaded", () => {
+    if (typeof LAST_UPDATED !== 'undefined') {
+      document.getElementById('ts-badge').innerText = "Data Last Updated: " + LAST_UPDATED;
+    }
+    
+    // Load Solved Levels Table
+    const tbody = document.querySelector('#solvedTable tbody');
+    if (typeof EXACT_LEVELS !== 'undefined') {
+      for (const [lvl, data] of Object.entries(EXACT_LEVELS)) {
+        tbody.innerHTML += <tr>
+          <td><strong>\</strong></td>
+          <td>\</td>
+          <td>\</td>
+        </tr>;
       }
     }
-  }
-  solved.sort((a, b) => a.level - b.level);
-  return solved;
-}
-
-function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
-
-// ---------- app state ----------
-let state = { points: [], fit: null };
-
-function render() {
-  // formula banner
-  const fMain = document.getElementById('formulaMain');
-  const fSub = document.getElementById('formulaSub');
-  if (!state.fit) {
-    fMain.textContent = 'Not enough data yet — add at least 3 readings.';
-    fSub.textContent = '';
-  } else {
-    const f = state.fit;
-    fMain.textContent = 'S(level) \u2248 ' + f.a.toPrecision(4) + ' \u00d7 level^' + f.n.toFixed(3);
-    const typicalErrPct = (Math.exp(f.residualStd) - 1) * 100;
-    fSub.textContent = 'Fit from ' + f.count + ' readings \u00b7 typical miss \u00b1' + typicalErrPct.toFixed(1) + '%';
-  }
-
-  document.getElementById('dataCount').textContent = state.points.length + ' readings stored';
-
-  // raw data table with per-row deviation + delete
-  const rawBody = document.querySelector('#rawTable tbody');
-  const sorted = [...state.points].sort((a, b) => a.damage - b.damage);
-  if (sorted.length === 0) {
-    rawBody.innerHTML = '<tr><td colspan="6" class="empty-note">No readings yet. Paste some above to get started.</td></tr>';
-  } else {
-    rawBody.innerHTML = sorted.map(p => {
-      let predCell = '\u2014', devCell = '\u2014', devClass = '';
-      if (state.fit) {
-        const pred = predictedFor(p, state.fit);
-        const dev = (p.damage - pred) / pred * 100;
-        predCell = fmt(pred);
-        devClass = Math.abs(dev) > 15 ? 'dev-high' : '';
-        devCell = (dev > 0 ? '+' : '') + dev.toFixed(1) + '%';
-      }
-      return '<tr>' +
-        '<td class="num">' + fmt(p.damage) + '</td>' +
-        '<td>' + Math.round(p.pct * 100) + '%</td>' +
-        '<td>' + p.level + '</td>' +
-        '<td class="num">' + predCell + '</td>' +
-        '<td class="num ' + devClass + '">' + devCell + '</td>' +
-        '<td><button class="del-btn" data-id="' + p.id + '" title="Remove this reading">\u00d7</button></td>' +
-        '</tr>';
-    }).join('');
-  }
-
-  // solved levels
-  const solved = solvedLevels(state.points);
-  const solvedBody = document.querySelector('#solvedTable tbody');
-  solvedBody.innerHTML = solved.length ? solved.map(s => (
-    '<tr><td>' + s.level + '</td><td class="num">' + fmt(s.start) + '</td><td class="num">' + fmt(s.start + s.window) + '</td><td class="num">' + fmt(s.window) + '</td><td>' + s.points + '</td></tr>'
-  )).join('') : '<tr><td colspan="5" class="empty-note">Nothing solved yet &mdash; add two readings from the same level to solve it exactly.</td></tr>';
-
-  // storage note
-  document.getElementById('storageNote').textContent = hasClaudeStorage
-    ? 'Saved automatically to your Claude account. If you download this file and open it on its own, it switches to saving in this browser instead.'
-    : 'Saved in this browser\u2019s local storage, since this page is running on its own outside Claude.';
-}
-
-async function persistAndRefit() {
-  state.fit = fitModel(state.points);
-  await storageSave(JSON.stringify(state.points));
-  render();
-}
-
-document.getElementById('addBtn').addEventListener('click', async () => {
-  const raw = document.getElementById('input').value;
-  const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-  const parsedOk = [];
-  let failCount = 0;
-  for (const line of lines) {
-    const p = parseLine(line);
-    if (p) parsedOk.push(p); else failCount++;
-  }
-  const fresh = dedupeAndTag(parsedOk, state.points);
-  state.points = [...state.points, ...fresh];
-  document.getElementById('input').value = '';
-  const dupeCount = parsedOk.length - fresh.length;
-  let msg = 'Added ' + fresh.length + ' new reading' + (fresh.length === 1 ? '' : 's') + '.';
-  if (dupeCount > 0) msg += ' ' + dupeCount + ' already stored.';
-  if (failCount > 0) msg += ' ' + failCount + ' line' + (failCount === 1 ? '' : 's') + ' couldn\u2019t be read \u2014 check they include a big damage number, a level, and a percent.';
-  document.getElementById('parseFeedback').textContent = msg;
-  await persistAndRefit();
-});
-
-document.getElementById('clearBtn').addEventListener('click', async () => {
-  if (!confirm('Remove all stored readings? This can\u2019t be undone.')) return;
-  state.points = [];
-  document.getElementById('parseFeedback').textContent = '';
-  await persistAndRefit();
-});
-
-document.querySelector('#rawTable tbody').addEventListener('click', async (e) => {
-  const btn = e.target.closest('.del-btn');
-  if (!btn) return;
-  const id = btn.getAttribute('data-id');
-  state.points = state.points.filter(p => p.id !== id);
-  await persistAndRefit();
-});
-
-// nearby-data deviation helper for prediction results
-function nearbyDeviationNote(level, fit, points) {
-  const nearby = points.filter(p => Math.abs(p.level - level) <= 2);
-  if (nearby.length === 0) {
-    return { text: 'No nearby readings yet to check this level against.', ok: true };
-  }
-  const avgAbsDev = nearby.reduce((s, p) => s + Math.abs((p.damage - predictedFor(p, fit)) / predictedFor(p, fit)), 0) / nearby.length * 100;
-  const ok = avgAbsDev <= 10;
-  return {
-    text: 'Readings near level ' + level + ' (' + nearby.length + ' of them) have deviated from this formula by about ' + avgAbsDev.toFixed(1) + '% on average.',
-    ok
-  };
-}
-
-document.getElementById('predictDamageBtn').addEventListener('click', () => {
-  const box = document.getElementById('damageResult');
-  box.style.display = 'block';
-  if (!state.fit) { box.innerHTML = '<div class="empty-note">Add at least 3 readings first.</div>'; return; }
-  const level = parseInt(document.getElementById('predLevel').value, 10);
-  const pct = (parseFloat(document.getElementById('predPct').value) || 0) / 100;
-  if (!level) { box.innerHTML = '<div class="empty-note">Enter a level.</div>'; return; }
-  const f = state.fit;
-  const s0 = S(level - 1, f), s1 = S(level, f);
-  const pred = s0 + pct * (s1 - s0);
-  const low = pred * Math.exp(-f.residualStd), high = pred * Math.exp(f.residualStd);
-  const low2 = pred * Math.exp(-1.96 * f.residualStd), high2 = pred * Math.exp(1.96 * f.residualStd);
-  const dev = nearbyDeviationNote(level, f, state.points);
-  box.innerHTML =
-    '<div class="result-headline">' + fmt(pred) + ' damage</div>' +
-    '<div class="result-context">Level ' + level + ' starts at ' + fmt(s0) + ' and finishes at ' + fmt(s1) + ' (window: ' + fmt(s1 - s0) + ').</div>' +
-    '<div class="result-ranges">' +
-      '<div class="range-line">Likely range: ' + fmt(low) + ' &ndash; ' + fmt(high) + '</div>' +
-      '<div class="range-line">Wide range: ' + fmt(low2) + ' &ndash; ' + fmt(high2) + '</div>' +
-    '</div>' +
-    '<div class="deviation-note' + (dev.ok ? ' ok' : '') + '">' + dev.text + '</div>';
-});
-
-document.getElementById('predictLevelBtn').addEventListener('click', () => {
-  const box = document.getElementById('levelResult');
-  box.style.display = 'block';
-  if (!state.fit) { box.innerHTML = '<div class="empty-note">Add at least 3 readings first.</div>'; return; }
-  const rawVal = document.getElementById('predDamage').value.replace(/,/g, '').trim();
-  const damage = parseFloat(rawVal);
-  if (!damage) { box.innerHTML = '<div class="empty-note">Enter a damage number.</div>'; return; }
-  const f = state.fit;
-  function levelPctFor(d) {
-    let z = 1;
-    while (S(z, f) < d && z < 500) z++;
-    const s0 = S(z - 1, f), s1 = S(z, f);
-    return { level: z, pct: (d - s0) / (s1 - s0), s0, s1 };
-  }
-  const central = levelPctFor(damage);
-  const lowD = damage * Math.exp(-f.residualStd), highD = damage * Math.exp(f.residualStd);
-  const lowR = levelPctFor(lowD), highR = levelPctFor(highD);
-  const dev = nearbyDeviationNote(central.level, f, state.points);
-  box.innerHTML =
-    '<div class="result-headline">Level ' + central.level + ', ' + (central.pct * 100).toFixed(1) + '%</div>' +
-    '<div class="result-context">For ' + fmt(damage) + ' damage. That level runs from ' + fmt(central.s0) + ' to ' + fmt(central.s1) + '.</div>' +
-    '<div class="result-ranges">' +
-      '<div class="range-line">Likely range: level ' + lowR.level + ' (' + (lowR.pct * 100).toFixed(0) + '%) to level ' + highR.level + ' (' + (highR.pct * 100).toFixed(0) + '%)</div>' +
-    '</div>' +
-    '<div class="deviation-note' + (dev.ok ? ' ok' : '') + '">' + dev.text + '</div>';
-});
-
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
   });
-});
 
-(async function init() {
-  let storedRaw = await storageLoad();
-  let points;
-  if (storedRaw) {
-    try { points = JSON.parse(storedRaw); } catch (e) { points = null; }
+  function calcDamage() {
+    const lvl = document.getElementById('pLevel').value;
+    const pct = parseFloat(document.getElementById('pPercent').value) / 100.0;
+    const box = document.getElementById('resDamage');
+    
+    if (!lvl || isNaN(pct)) {
+      box.style.display = 'block';
+      box.innerHTML = <div class="result-desc">Please enter both Level and Percentage.</div>;
+      return;
+    }
+
+    if (EXACT_LEVELS[lvl]) {
+      const data = EXACT_LEVELS[lvl];
+      const damage = data.start + (pct * data.window);
+      box.style.display = 'block';
+      box.innerHTML = 
+        <div class="result-title">\ Damage</div>
+        <div class="result-desc">Using exact ML formula for Level \.<br>Start: \ | Window: \</div>
+      ;
+    } else {
+      box.style.display = 'block';
+      box.innerHTML = 
+        <div class="result-title" style="color: #e67e22;">Formula Missing</div>
+        <div class="result-desc">We haven't solved Level \ yet. Ask an admin to upload screenshots for this level into the ML pipeline!</div>
+      ;
+    }
   }
-  if (!points || points.length === 0) {
-    const seeded = SEED_TEXT.split('\n').map(l => l.trim()).filter(Boolean).map(parseLine).filter(Boolean);
-    points = dedupeAndTag(seeded, []);
-    await storageSave(JSON.stringify(points));
-  } else {
-    points = points.map(p => p.id ? p : { ...p, id: makeId() });
-  }
-  state.points = points;
-  state.fit = fitModel(state.points);
-  render();
-})();
 </script>
+
 </body>
 </html>
-
-

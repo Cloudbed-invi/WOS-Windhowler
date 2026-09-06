@@ -3,6 +3,7 @@ import re
 import csv
 import json
 import pandas as pd
+from datetime import datetime
 from sklearn.linear_model import HuberRegressor
 
 def setup_folders():
@@ -65,12 +66,8 @@ def run_ml_and_export():
     levels.sort()
     
     exact_formulas = {}
-    
-    # Preserve Level 1 starting point logic if we have it
     if 1 not in levels:
         exact_formulas[1] = {"start": 0, "window": 24300}
-        
-    # Preserve Level 25 from earlier data
     if 25 not in levels:
         exact_formulas[25] = {"start": 386739898, "window": 71536909}
     
@@ -94,8 +91,10 @@ def run_ml_and_export():
             "window": round(window_size)
         }
         
-    # Automate saving directly to the exact_levels.js file
-    js_content = "const EXACT_LEVELS = " + json.dumps(exact_formulas, indent=2) + ";"
+    # Generate timestamp
+    last_updated = datetime.now().strftime("%B %d, %Y - %H:%M:%S")
+    
+    js_content = f"const LAST_UPDATED = '{last_updated}';\nconst EXACT_LEVELS = " + json.dumps(exact_formulas, indent=2) + ";"
     with open("exact_levels.js", "w", encoding="utf-8") as f:
         f.write(js_content)
         
@@ -105,4 +104,3 @@ if __name__ == "__main__":
     setup_folders()
     if run_ocr():
         run_ml_and_export()
-        print("Updated exact_levels.js automatically!")
