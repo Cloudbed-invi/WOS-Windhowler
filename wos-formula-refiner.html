@@ -139,9 +139,15 @@
       <h2>📊 Currently Solved Levels</h2>
       <p style="font-size: 13px; color: var(--muted); margin-top:0;">Exact formulas calculated by the AI from community screenshots.</p>
       
-      <div class="toggle-container">
-        <input type="checkbox" id="showEstimated" onchange="renderTable()">
-        <label for="showEstimated" style="margin:0; font-weight:bold; color:var(--text); cursor:pointer;">Show ML Estimated Levels (Red)</label>
+      <div class="toggle-container" style="justify-content: space-between; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="showEstimated" onchange="renderTable()">
+          <label for="showEstimated" style="margin:0; font-weight:bold; color:var(--text); cursor:pointer;">Show ML Estimated Levels (Red)</label>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 5px;">
+          <label style="margin:0; font-weight:bold; color:var(--muted);">Filter:</label>
+          <input type="text" id="tableSearch" placeholder="e.g. 48 or 20-30" onkeyup="renderTable()" style="padding:4px 8px; font-size:13px; border-radius:4px; border:1px solid var(--border); width: 140px; margin: 0;">
+        </div>
       </div>
 
       <div class="table-responsive">
@@ -406,4 +412,5 @@
 
 </body>
 </html>
+
 
