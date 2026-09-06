@@ -90,6 +90,12 @@
       <br><code>Damage = Start_HP + (Percent &times; Window_Size)</code>
     </div>
 
+    <div id="mlFormulaBanner" style="display:none; background: #e8f4fd; border-left: 4px solid #3498db; padding: 12px 15px; border-radius: 4px; font-size: 14px; margin-bottom: 20px; line-height: 1.5;">
+      <strong>🚀 Infinite Scaling Formula</strong><br>
+      Our Non-Linear ML algorithm reverse-engineered the game's core difficulty engine! This mathematical formula dynamically updates and gets more accurate as the community uploads new data:<br>
+      <br><code id="mlFormulaText" style="font-family: monospace; font-size: 15px; font-weight: bold; color: #2980b9;"></code>
+    </div>
+
     <div class="card">
       <h2>🎯 Predict Damage</h2>
       <div class="input-group">
@@ -205,6 +211,18 @@
     if (typeof LAST_UPDATED !== 'undefined') {
       document.getElementById('ts-badge').innerText = "Data Last Updated: " + LAST_UPDATED;
     }
+    
+    // Inject dynamic ML Formula
+    if (typeof EXTRAPOLATE_A !== 'undefined' && typeof EXTRAPOLATE_B !== 'undefined') {
+      const banner = document.getElementById('mlFormulaBanner');
+      if (banner) {
+        banner.style.display = 'block';
+        const a = Math.round(EXTRAPOLATE_A).toLocaleString('en-US');
+        const b = EXTRAPOLATE_B.toFixed(4);
+        document.getElementById('mlFormulaText').innerText = Start HP = \ × Level^\;
+      }
+    }
+
     renderTable();
   });
 
@@ -412,6 +430,7 @@
 
 </body>
 </html>
+
 
 
 
