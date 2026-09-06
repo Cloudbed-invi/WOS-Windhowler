@@ -84,6 +84,16 @@
   </div>
 
   <div class="card">
+    <h2>🔮 Predict Level from Damage</h2>
+    <div class="input-group">
+      <label>Damage Dealt</label>
+      <input type="text" id="pDmgInput" placeholder="e.g. 3,500,000,000" inputmode="numeric">
+    </div>
+    <button onclick="calcLevel()">Calculate Level</button>
+    <div id="resLevel" class="result-box"></div>
+  </div>
+
+  <div class="card">
     <h2>📊 Currently Solved Levels</h2>
     <p style="font-size: 13px; color: var(--muted); margin-top:0;">These are the exact formulas calculated by the AI from community screenshots.</p>
     <div class="table-responsive">
@@ -101,19 +111,18 @@
 </div>
 
 <script>
-  // Format numbers with commas
   const fmt = (num) => Math.round(num).toLocaleString('en-US');
 
-  // Load Timestamp
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof LAST_UPDATED !== 'undefined') {
       document.getElementById('ts-badge').innerText = "Data Last Updated: " + LAST_UPDATED;
     }
     
-    // Load Solved Levels Table
     const tbody = document.querySelector('#solvedTable tbody');
     if (typeof EXACT_LEVELS !== 'undefined') {
-      for (const [lvl, data] of Object.entries(EXACT_LEVELS)) {
+      const sortedKeys = Object.keys(EXACT_LEVELS).map(Number).sort((a,b)=>a-b);
+      for (const lvl of sortedKeys) {
+        const data = EXACT_LEVELS[lvl];
         tbody.innerHTML += <tr>
           <td><strong>\</strong></td>
           <td>\</td>
@@ -147,6 +156,49 @@
       box.innerHTML = 
         <div class="result-title" style="color: #e67e22;">Formula Missing</div>
         <div class="result-desc">We haven't solved Level \ yet. Ask an admin to upload screenshots for this level into the ML pipeline!</div>
+      ;
+    }
+  }
+
+  function calcLevel() {
+    const rawVal = document.getElementById('pDmgInput').value.replace(/,/g, '').trim();
+    const dmg = parseFloat(rawVal);
+    const box = document.getElementById('resLevel');
+
+    if (isNaN(dmg)) {
+      box.style.display = 'block';
+      box.innerHTML = <div class="result-desc">Please enter a valid damage number.</div>;
+      return;
+    }
+
+    // Find the exact level where this damage fits
+    let foundLvl = null;
+    let foundPct = 0;
+
+    if (typeof EXACT_LEVELS !== 'undefined') {
+      const sortedKeys = Object.keys(EXACT_LEVELS).map(Number).sort((a,b)=>a-b);
+      for (const lvl of sortedKeys) {
+        const data = EXACT_LEVELS[lvl];
+        const end = data.start + data.window;
+        if (dmg >= data.start && dmg <= end) {
+          foundLvl = lvl;
+          foundPct = (dmg - data.start) / data.window;
+          break;
+        }
+      }
+    }
+
+    box.style.display = 'block';
+    if (foundLvl !== null) {
+      box.innerHTML = 
+        <div class="result-title">Level \ at \%</div>
+        <div class="result-desc">Based on the exact ML formula.</div>
+      ;
+    } else {
+      box.style.display = 'block';
+      box.innerHTML = 
+        <div class="result-title" style="color: #e67e22;">Cannot Predict Exact Level</div>
+        <div class="result-desc">This damage falls into a gap between levels we haven't fully solved yet!</div>
       ;
     }
   }

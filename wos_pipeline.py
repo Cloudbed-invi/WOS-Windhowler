@@ -73,7 +73,7 @@ def run_ml_and_export():
     
     for lvl in levels:
         level_data = df[df['Level'] == lvl]
-        if len(level_data) < 2:
+        if len(level_data["Percent"].unique()) < 2:
             continue
             
         X = (level_data['Percent'] / 100.0).values.reshape(-1, 1)
@@ -104,3 +104,4 @@ if __name__ == "__main__":
     setup_folders()
     if run_ocr():
         run_ml_and_export()
+
