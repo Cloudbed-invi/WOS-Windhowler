@@ -1,84 +1,254 @@
-const LAST_UPDATED = 'September 06, 2026 - 23:33:03';
+const LAST_UPDATED = 'September 06, 2026 - 23:34:24';
 const EXACT_LEVELS = {
   "1": {
     "start": 0,
-    "window": 24300
+    "window": 24300,
+    "confirmed": true
+  },
+  "2": {
+    "start": 514459,
+    "window": 1549176,
+    "confirmed": false
+  },
+  "3": {
+    "start": 2063635,
+    "window": 2592592,
+    "confirmed": false
+  },
+  "4": {
+    "start": 4656228,
+    "window": 3644707,
+    "confirmed": false
+  },
+  "5": {
+    "start": 8300935,
+    "window": 4705521,
+    "confirmed": false
+  },
+  "6": {
+    "start": 13006455,
+    "window": 5775033,
+    "confirmed": false
+  },
+  "7": {
+    "start": 18781489,
+    "window": 6853244,
+    "confirmed": false
+  },
+  "8": {
+    "start": 25634733,
+    "window": 7940154,
+    "confirmed": false
+  },
+  "9": {
+    "start": 33574887,
+    "window": 9035763,
+    "confirmed": false
+  },
+  "10": {
+    "start": 42610650,
+    "window": 10140071,
+    "confirmed": false
+  },
+  "11": {
+    "start": 52750721,
+    "window": 11253077,
+    "confirmed": false
+  },
+  "12": {
+    "start": 64003797,
+    "window": 12374782,
+    "confirmed": false
+  },
+  "13": {
+    "start": 76378579,
+    "window": 13505186,
+    "confirmed": false
+  },
+  "14": {
+    "start": 89883765,
+    "window": 14644288,
+    "confirmed": false
+  },
+  "15": {
+    "start": 104528054,
+    "window": 15792090,
+    "confirmed": false
+  },
+  "16": {
+    "start": 120320143,
+    "window": 16948590,
+    "confirmed": false
+  },
+  "17": {
+    "start": 137268734,
+    "window": 18113789,
+    "confirmed": false
+  },
+  "18": {
+    "start": 155382523,
+    "window": 19287687,
+    "confirmed": false
+  },
+  "19": {
+    "start": 174670210,
+    "window": 20470284,
+    "confirmed": false
+  },
+  "20": {
+    "start": 195140493,
+    "window": 21661579,
+    "confirmed": false
+  },
+  "21": {
+    "start": 216802072,
+    "window": 22861573,
+    "confirmed": false
+  },
+  "22": {
+    "start": 239663645,
+    "window": 24070266,
+    "confirmed": false
   },
   "23": {
     "start": 263733911,
-    "window": 56812891
+    "window": 56812891,
+    "confirmed": true
+  },
+  "24": {
+    "start": 314676194,
+    "window": 71923685,
+    "confirmed": false
   },
   "25": {
     "start": 386599879,
-    "window": 71766589
+    "window": 71766589,
+    "confirmed": true
   },
   "26": {
     "start": 458087907,
-    "window": 78710142
+    "window": 78710142,
+    "confirmed": true
   },
   "27": {
     "start": 536742898,
-    "window": 113490701
+    "window": 113490701,
+    "confirmed": true
   },
   "28": {
     "start": 649866656,
-    "window": 121149824
+    "window": 121149824,
+    "confirmed": true
   },
   "29": {
     "start": 772045722,
-    "window": 133066318
+    "window": 133066318,
+    "confirmed": true
   },
   "30": {
     "start": 904986351,
-    "window": 145148899
+    "window": 145148899,
+    "confirmed": true
+  },
+  "31": {
+    "start": 1050060197,
+    "window": 156316060,
+    "confirmed": false
   },
   "32": {
     "start": 1206376257,
-    "window": 169669783
+    "window": 169669783,
+    "confirmed": true
+  },
+  "33": {
+    "start": 1376380935,
+    "window": 183896804,
+    "confirmed": false
   },
   "34": {
     "start": 1560277739,
-    "window": 199034225
+    "window": 199034225,
+    "confirmed": true
+  },
+  "35": {
+    "start": 1758916168,
+    "window": 214212663,
+    "confirmed": false
   },
   "36": {
     "start": 1973128831,
-    "window": 235909825
+    "window": 235909825,
+    "confirmed": true
+  },
+  "37": {
+    "start": 2203854584,
+    "window": 248121981,
+    "confirmed": false
   },
   "38": {
     "start": 2451976565,
-    "window": 273967987
+    "window": 273967987,
+    "confirmed": true
   },
   "39": {
     "start": 2723989318,
-    "window": 285138965
+    "window": 285138965,
+    "confirmed": true
   },
   "40": {
     "start": 3012978919,
-    "window": 308545826
+    "window": 308545826,
+    "confirmed": true
   },
   "41": {
     "start": 3324664306,
-    "window": 332326245
+    "window": 332326245,
+    "confirmed": true
   },
   "42": {
     "start": 3660540566,
-    "window": 344230835
+    "window": 344230835,
+    "confirmed": true
   },
   "43": {
     "start": 4020552848,
-    "window": 379512961
+    "window": 379512961,
+    "confirmed": true
   },
   "44": {
     "start": 4413593818,
-    "window": 405491225
+    "window": 405491225,
+    "confirmed": true
   },
   "45": {
     "start": 4823692161,
-    "window": 415513658
+    "window": 415513658,
+    "confirmed": true
+  },
+  "46": {
+    "start": 5280296343,
+    "window": 485743214,
+    "confirmed": false
+  },
+  "47": {
+    "start": 5766039557,
+    "window": 511974421,
+    "confirmed": false
+  },
+  "48": {
+    "start": 6278013977,
+    "window": 535297801,
+    "confirmed": false
   },
   "49": {
     "start": 6813311778,
-    "window": 572935651
+    "window": 572935651,
+    "confirmed": true
+  },
+  "50": {
+    "start": 7365872027,
+    "window": 566135539,
+    "confirmed": false
   }
 };
 const RAW_DATA = [

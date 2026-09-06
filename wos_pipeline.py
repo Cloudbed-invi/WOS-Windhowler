@@ -3,58 +3,14 @@ import re
 import csv
 import json
 import pandas as pd
+import numpy as np
 from datetime import datetime
 from sklearn.linear_model import HuberRegressor
+from scipy.interpolate import PchipInterpolator
 
 def setup_folders():
     if not os.path.exists("images"):
         os.makedirs("images")
-
-def run_ocr(progress_callback=None):
-    try:
-        import easyocr
-    except ImportError:
-        return False
-        
-    reader = easyocr.Reader(['en', 'ch_sim'], gpu=True)
-    csv_file = "data.csv"
-    
-    image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-    total = len(image_files)
-    
-    with open(csv_file, mode='a', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
-        
-        for i, filename in enumerate(image_files):
-            img_path = os.path.join("images", filename)
-            results = reader.readtext(img_path, detail=0)
-            full_text = " ".join(results)
-            
-            damage_match = re.search(r'dealt\s+([\d,]+)\s+damage', full_text)
-            percent_match = re.search(r'reaching\s+(\d+)%', full_text)
-            level_match = re.search(r'Lv[.,\s_]*(\d+)', full_text)
-            name = "Unknown"
-            if "Overview" in full_text and "Windhowler" in full_text:
-                try:
-                    name_part = full_text.split("Overview")[1].split("Windhowler")[0].strip()
-                    if name_part: name = name_part
-                except: pass
-
-            try:
-                damage = int(damage_match.group(1).replace(',', '')) if damage_match else None
-                percent = int(percent_match.group(1)) if percent_match else None
-                level = int(level_match.group(1)) if level_match else None
-                name = name.replace('J', ']') if '[' in name and 'J' in name else name
-                
-                if damage and level:
-                    writer.writerow({"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename})
-            except Exception:
-                pass
-            
-            if progress_callback:
-                progress_callback(i + 1, total)
-                
-    return True
 
 def run_ml_and_export():
     if not os.path.exists("data.csv"):
@@ -66,7 +22,7 @@ def run_ml_and_export():
     
     exact_formulas = {}
     if 1 not in levels:
-        exact_formulas[1] = {"start": 0, "window": 24300}
+        exact_formulas[1] = {"start": 0, "window": 24300, "confirmed": True}
     
     for lvl in levels:
         level_data = df[df['Level'] == lvl]
@@ -85,20 +41,47 @@ def run_ml_and_export():
         
         exact_formulas[int(lvl)] = {
             "start": round(start_damage),
-            "window": round(window_size)
+            "window": round(window_size),
+            "confirmed": True
         }
+    
+    # Interpolate missing levels
+    known_levels = sorted(list(exact_formulas.keys()))
+    known_starts = [exact_formulas[l]["start"] for l in known_levels]
+    
+    # We must add an artificial anchor at the end so interpolation works up to level 60
+    if known_levels[-1] < 60:
+        known_levels.append(60)
+        # extrapolate the last window roughly
+        last_window = exact_formulas[known_levels[-2]]["window"]
+        known_starts.append(known_starts[-1] + (last_window * 1.1 * (60 - known_levels[-2])))
+        
+    interp = PchipInterpolator(known_levels, known_starts)
+    
+    all_levels = {}
+    for lvl in range(1, 51):
+        if lvl in exact_formulas:
+            all_levels[lvl] = exact_formulas[lvl]
+        else:
+            start = float(interp(lvl))
+            next_start = float(interp(lvl + 1))
+            all_levels[lvl] = {
+                "start": round(start),
+                "window": round(next_start - start),
+                "confirmed": False
+            }
         
     last_updated = datetime.now().strftime("%B %d, %Y - %H:%M:%S")
     raw_data = df[['Level', 'Percent', 'Damage', 'Name']].to_dict(orient='records')
     
     js_content = f"const LAST_UPDATED = '{last_updated}';\n"
-    js_content += "const EXACT_LEVELS = " + json.dumps(exact_formulas, indent=2) + ";\n"
+    js_content += "const EXACT_LEVELS = " + json.dumps(all_levels, indent=2) + ";\n"
     js_content += "const RAW_DATA = " + json.dumps(raw_data, indent=2) + ";\n"
     
     with open("exact_levels.js", "w", encoding="utf-8") as f:
         f.write(js_content)
         
-    return exact_formulas
+    return all_levels
 
 if __name__ == "__main__":
     setup_folders()
