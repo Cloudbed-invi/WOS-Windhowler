@@ -89,7 +89,7 @@ def run_ocr(progress_callback=None):
                 level = int(level_match.group(1)) if level_match else None
                 name = name.replace('J', ']') if '[' in name and 'J' in name else name
                 
-                if damage and level:
+                if damage and level and percent is not None:
                     entry = {"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename}
                     writer.writerow(entry)
                     new_entries.append(entry)
@@ -217,3 +217,4 @@ def run_ml_and_export():
 if __name__ == "__main__":
     setup_folders()
     run_ml_and_export()
+
