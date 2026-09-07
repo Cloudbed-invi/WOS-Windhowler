@@ -36,35 +36,14 @@ def run_ocr(progress_callback=None):
         return []
         
     reader = easyocr.Reader(['en', 'ch_sim'], gpu=True)
-    csv_file = "data.csv"
     
     image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg')) and not f.endswith('_opt.jpg')]
     total = len(image_files)
     if total == 0: return []
     
-    processed_files = set()
-    if os.path.exists(csv_file):
-        with open(csv_file, mode='r', encoding='utf-8') as f:
-            reader_csv = csv.DictReader(f)
-            if "File" in reader_csv.fieldnames:
-                for row in reader_csv:
-                    processed_files.add(row["File"])
-                    
     new_entries = []
-    with open(csv_file, mode='a', newline='', encoding='utf-8') as f:
-        f.seek(0, os.SEEK_END)
-        if f.tell() == 0:
-            writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
-            writer.writeheader()
-        else:
-            writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
-            
-        for i, filename in enumerate(image_files):
-            if filename in processed_files:
-                if progress_callback: progress_callback(i + 1, total)
-                continue
-                
-            img_path = os.path.join("images", filename)
+    for i, filename in enumerate(image_files):
+        img_path = os.path.join("images", filename)
             
             # OPTIMIZATION: Pre-process image with OpenCV
             opt_path = optimize_image_for_ocr(img_path)
@@ -91,7 +70,6 @@ def run_ocr(progress_callback=None):
                 
                 if damage and level and percent is not None:
                     entry = {"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename}
-                    writer.writerow(entry)
                     new_entries.append(entry)
             except Exception:
                 pass
@@ -217,4 +195,5 @@ def run_ml_and_export():
 if __name__ == "__main__":
     setup_folders()
     run_ml_and_export()
+
 

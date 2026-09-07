@@ -164,6 +164,8 @@ if "seen_hashes" not in st.session_state:
     st.session_state.seen_hashes = set()
 if "uploaded_files_cache" not in st.session_state:
     st.session_state.uploaded_files_cache = []
+if "pending_ocr" not in st.session_state:
+    st.session_state.pending_ocr = None
 
 st.subheader("📸 Process Screenshots")
 st.info("💡 **Magic Paste:** Simply click anywhere on this page and press **Ctrl+V** on your keyboard to paste a screenshot! No popup will open.")
@@ -203,7 +205,7 @@ if total_ready > 0:
                     st.session_state.pasted_images.pop(idx)
                     st.rerun()
                     
-    if st.button("Save & Process Images", type="primary"):
+    if st.button("Extract Data from Images (OCR)", type="primary"):
         wos_pipeline.setup_folders()
         
         import hashlib
@@ -243,7 +245,6 @@ if total_ready > 0:
         if duplicate_count > 0:
             st.warning(f"Ignored {duplicate_count} duplicate images that were already processed previously.")
             
-        st.success(f"Successfully saved {saved_count} new images!")
         st.session_state.pasted_images = []
         st.session_state.uploaded_files_cache = []
         
@@ -258,19 +259,12 @@ if total_ready > 0:
         new_entries = wos_pipeline.run_ocr(progress_callback=update_progress)
         status_text.text("OCR Complete!")
         
-        st.write("### Running Machine Learning Model")
-        
-        # Read old formula
-        old_a, old_b = 0, 0
-        if os.path.exists("exact_levels.js"):
-            with open("exact_levels.js", "r", encoding="utf-8") as f:
-                content = f.read()
-                import re
-                match_a = re.search(r'const EXTRAPOLATE_A = ([\d.]+);', content)
-                match_b = re.search(r'const EXTRAPOLATE_B = ([\d.]+);', content)
-                if match_a: old_a = float(match_a.group(1))
-                if match_b: old_b = float(match_b.group(1))
-                
+        if isinstance(new_entries, list) and len(new_entries) > 0:
+            st.session_state.pending_ocr = new_entries
+        else:
+            st.warning("No readable data could be extracted from those images.")
+            st.session_state.pending_ocr = None
+            
         # DELETE IMAGES IMMEDIATELY AFTER OCR TO SAVE SPACE!
         for f_name in os.listdir("images"):
             f_path = os.path.join("images", f_name)
@@ -279,54 +273,44 @@ if total_ready > 0:
                     os.remove(f_path)
                 except:
                     pass
-                    
-        with st.spinner("Calculating exact mathematical formulas..."):
-            results = wos_pipeline.run_ml_and_export()
-            new_a = results.get("A", 0)
-            new_b = results.get("B", 0)
-            
-            st.success("✅ Machine Learning Models Updated!")
-            
-            st.write("### 📊 What just changed?")
-            if isinstance(new_entries, list) and len(new_entries) > 0:
-                st.write(f"**Found {len(new_entries)} new data points from screenshots:**")
-                st.dataframe(new_entries)
-            else:
-                st.write("**No new readable data found in screenshots.** (Or they were already processed).")
-                
-            st.info(f"**Old Formula:** Start HP = {round(old_a)} × Level^{old_b:.4f}\n\n**New Formula:** Start HP = {round(new_a)} × Level^{new_b:.4f}")
-            
-        time.sleep(5)
         st.rerun()
 
-st.write("---")
-with st.expander("Process Previously Saved Images (Recovery Mode)"):
-    st.write("If you already pasted images but the OCR process failed or was interrupted, click below to re-run OCR and Machine Learning on all images currently saved in your `images/` folder.")
-    if st.button("Run Pipeline on Saved Images", type="secondary"):
-        st.write("### Extracting Data (OCR)")
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        
-        def update_progress(current, total):
-            progress_bar.progress(current / total)
-            status_text.text(f"Processing image {current} of {total}...")
+# --- REVIEW PENDING OCR ---
+if st.session_state.pending_ocr is not None:
+    st.write("---")
+    st.subheader("🧐 Review Extracted Data")
+    st.info("The OCR extracted the following data. Verify it is correct before publishing.")
+    
+    edited_df = st.data_editor(st.session_state.pending_ocr, num_rows="dynamic")
+    
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("✅ Approve & Publish to AI Model", type="primary"):
+            # Save approved data to CSV
+            with open("data.csv", mode='a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
+                for row in edited_df:
+                    if row.get("Level") and row.get("Damage") and row.get("Percent") is not None:
+                        writer.writerow({
+                            "File": row.get("File", "Unknown"),
+                            "Name": row.get("Name", "Community"),
+                            "Level": int(row["Level"]),
+                            "Percent": float(row["Percent"]),
+                            "Damage": int(row["Damage"])
+                        })
             
-        wos_pipeline.run_ocr(progress_callback=update_progress)
-        status_text.text("OCR Complete!")
-        
-        st.write("### Running Machine Learning Model")
-        # DELETE IMAGES IMMEDIATELY AFTER OCR TO SAVE SPACE!
-        for f_name in os.listdir("images"):
-            f_path = os.path.join("images", f_name)
-            if os.path.isfile(f_path):
-                try:
-                    os.remove(f_path)
-                except:
-                    pass
-                    
-        with st.spinner("Calculating exact mathematical formulas..."):
-            results = wos_pipeline.run_ml_and_export()
-            st.success("✅ exact_levels.js updated successfully!")
+            with st.spinner("Recalculating AI formulas..."):
+                wos_pipeline.run_ml_and_export()
+                
+            st.success("✅ Data Approved and AI Model Updated!")
+            st.session_state.pending_ocr = None
+            time.sleep(2)
+            st.rerun()
+            
+    with c2:
+        if st.button("❌ Discard All"):
+            st.session_state.pending_ocr = None
+            st.rerun()
 
 st.divider()
 
@@ -347,9 +331,3 @@ if st.button("Commit & Push to GitHub"):
                 st.rerun()
     except Exception as e:
         st.error(f"Failed to push to GitHub. Error: {e}")
-
-
-
-
-
-
