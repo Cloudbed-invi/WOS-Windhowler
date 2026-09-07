@@ -17,14 +17,14 @@ def run_ocr(progress_callback=None):
     try:
         import easyocr
     except ImportError:
-        return False
+        return []
         
     reader = easyocr.Reader(['en', 'ch_sim'], gpu=True)
     csv_file = "data.csv"
     
     image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
     total = len(image_files)
-    if total == 0: return True
+    if total == 0: return []
     
     processed_files = set()
     if os.path.exists(csv_file):
@@ -34,6 +34,7 @@ def run_ocr(progress_callback=None):
                 for row in reader_csv:
                     processed_files.add(row["File"])
                     
+    new_entries = []
     with open(csv_file, mode='a', newline='', encoding='utf-8') as f:
         f.seek(0, os.SEEK_END)
         if f.tell() == 0:
@@ -68,14 +69,16 @@ def run_ocr(progress_callback=None):
                 name = name.replace('J', ']') if '[' in name and 'J' in name else name
                 
                 if damage and level:
-                    writer.writerow({"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename})
+                    entry = {"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename}
+                    writer.writerow(entry)
+                    new_entries.append(entry)
             except Exception:
                 pass
             
             if progress_callback:
                 progress_callback(i + 1, total)
                 
-    return True
+    return new_entries
 
 def power_law(x, a, b):
     return a * np.power(x, b)
@@ -95,7 +98,6 @@ def run_ml_and_export():
     levels = df['Level'].unique()
     levels.sort()
     
-    # 1. Huber Regression for exact confirmed levels (Needs 2+ points)
     exact_formulas = {}
     if 1 not in levels:
         exact_formulas[1] = {"start": 0, "window": 24300, "confirmed": True}
@@ -121,8 +123,7 @@ def run_ml_and_export():
             "confirmed": True
         }
     
-    # 2. Global Power Law Fit using ALL raw data points (even single unconfirmed dots!)
-    df_fit = df[df['Level'] > 1] # Skip lv 1 for log stability
+    df_fit = df[df['Level'] > 1]
     if not df_fit.empty:
         L_data = df_fit['Level'].values
         P_data = df_fit['Percent'].values
@@ -138,7 +139,6 @@ def run_ml_and_export():
         extrapolate_A = 844.19
         extrapolate_B = 4.0878
     
-    # 3. Pchip Interpolation for missing exact levels up to max confirmed
     known_levels = np.array(sorted(list(exact_formulas.keys())))
     known_starts = np.array([exact_formulas[l]["start"] for l in known_levels])
     max_known_confirmed = known_levels[-1]
@@ -158,7 +158,6 @@ def run_ml_and_export():
                 "confirmed": False
             }
             
-    # 4. Extrapolate up to the absolute highest dot the user has uploaded, plus a few levels buffer
     highest_raw_level = int(df['Level'].max())
     extrapolate_target = max(60, highest_raw_level + 2)
     
@@ -184,7 +183,11 @@ def run_ml_and_export():
     with open("exact_levels.js", "w", encoding="utf-8") as f:
         f.write(js_content)
         
-    return all_levels
+    return {
+        "levels": all_levels,
+        "A": extrapolate_A,
+        "B": extrapolate_B
+    }
 
 if __name__ == "__main__":
     setup_folders()

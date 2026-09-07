@@ -228,14 +228,39 @@ if total_ready > 0:
             progress_bar.progress(current / total)
             status_text.text(f"Processing image {current} of {total}...")
             
-        wos_pipeline.run_ocr(progress_callback=update_progress)
+        new_entries = wos_pipeline.run_ocr(progress_callback=update_progress)
         status_text.text("OCR Complete!")
         
         st.write("### Running Machine Learning Model")
+        
+        # Read old formula
+        old_a, old_b = 0, 0
+        if os.path.exists("exact_levels.js"):
+            with open("exact_levels.js", "r", encoding="utf-8") as f:
+                content = f.read()
+                import re
+                match_a = re.search(r'const EXTRAPOLATE_A = ([\d.]+);', content)
+                match_b = re.search(r'const EXTRAPOLATE_B = ([\d.]+);', content)
+                if match_a: old_a = float(match_a.group(1))
+                if match_b: old_b = float(match_b.group(1))
+                
         with st.spinner("Calculating exact mathematical formulas..."):
             results = wos_pipeline.run_ml_and_export()
-            st.success("✅ exact_levels.js updated successfully!")
+            new_a = results.get("A", 0)
+            new_b = results.get("B", 0)
             
+            st.success("✅ Machine Learning Models Updated!")
+            
+            st.write("### 📊 What just changed?")
+            if new_entries:
+                st.write(f"**Found {len(new_entries)} new data points from screenshots:**")
+                st.dataframe(new_entries)
+            else:
+                st.write("**No new readable data found in screenshots.** (Or they were already processed).")
+                
+            st.info(f"**Old Formula:** Start HP = {round(old_a)} × Level^{old_b:.4f}\n\n**New Formula:** Start HP = {round(new_a)} × Level^{new_b:.4f}")
+            
+        time.sleep(5)
         st.rerun()
 
 st.write("---")
@@ -264,12 +289,19 @@ st.subheader("🚀 Publish to GitHub Pages")
 st.write("Commit the updated exact_levels.js and HTML file to your repository so visitors see the latest formulas.")
 if st.button("Commit & Push to GitHub"):
     try:
-        with st.spinner("Pushing to GitHub..."):
-            subprocess.run(["git", "add", "."], check=True)
-            subprocess.run(["git", "commit", "-m", "Auto-update exact levels from Admin UI"], check=True)
-            subprocess.run(["git", "push"], check=True)
-        st.success("✅ Successfully published to GitHub Pages!")
-        st.rerun()
+        with st.spinner("Checking for changes..."):
+            status_output = subprocess.check_output(["git", "status", "--porcelain"], text=True)
+            if not status_output.strip():
+                st.info("👍 Everything is already up to date! There are no new changes to push.")
+            else:
+                subprocess.run(["git", "add", "."], check=True)
+                subprocess.run(["git", "commit", "-m", "Auto-update exact levels from Admin UI"], check=True)
+                subprocess.run(["git", "push"], check=True)
+                st.success("✅ Successfully published to GitHub Pages!")
+                time.sleep(2)
+                st.rerun()
     except Exception as e:
         st.error(f"Failed to push to GitHub. Error: {e}")
+
+
 
