@@ -1,6 +1,6 @@
-const LAST_UPDATED = 'September 07, 2026 - 22:24:24';
-const EXTRAPOLATE_A = 590.1935164124799;
-const EXTRAPOLATE_B = 4.181308628228207;
+const LAST_UPDATED = 'September 07, 2026 - 22:59:38';
+const EXTRAPOLATE_A = 590.0252710499568;
+const EXTRAPOLATE_B = 4.1813801175239105;
 const EXACT_LEVELS = {
   "1": {
     "start": 0,
@@ -298,38 +298,38 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "60": {
-    "start": 16069175715,
-    "window": 1149885802,
+    "start": 16069297730,
+    "window": 1149914880,
     "confirmed": false,
     "extrapolated": true
   },
   "61": {
-    "start": 17219061517,
-    "window": 1211444992,
+    "start": 17219212610,
+    "window": 1211477047,
     "confirmed": false,
     "extrapolated": true
   },
   "62": {
-    "start": 18430506509,
-    "window": 1275226705,
+    "start": 18430689656,
+    "window": 1275261918,
     "confirmed": false,
     "extrapolated": true
   },
   "63": {
-    "start": 19705733213,
-    "window": 1341273694,
+    "start": 19705951574,
+    "window": 1341312252,
     "confirmed": false,
     "extrapolated": true
   },
   "64": {
-    "start": 21047006907,
-    "window": 1409628836,
+    "start": 21047263827,
+    "window": 1409670934,
     "confirmed": false,
     "extrapolated": true
   },
   "65": {
-    "start": 22456635743,
-    "window": 1480335131,
+    "start": 22456934761,
+    "window": 1480380969,
     "confirmed": false,
     "extrapolated": true
   }
@@ -1035,6 +1035,12 @@ const RAW_DATA = [
     "Level": 50,
     "Percent": 48.0,
     "Damage": 7703667480,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 21,
+    "Percent": 1.0,
+    "Damage": 173466445,
     "Name": "Unknown"
   }
 ];
