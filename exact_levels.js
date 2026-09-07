@@ -1,6 +1,6 @@
-const LAST_UPDATED = 'September 06, 2026 - 23:46:36';
-const EXTRAPOLATE_A = 844.19425636015;
-const EXTRAPOLATE_B = 4.087798284547618;
+const LAST_UPDATED = 'September 07, 2026 - 08:50:56';
+const EXTRAPOLATE_A = 805.1016000462122;
+const EXTRAPOLATE_B = 4.100201737652852;
 const EXACT_LEVELS = {
   "1": {
     "start": 0,
@@ -228,88 +228,82 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "46": {
-    "start": 5276310104,
-    "window": 479099484,
+    "start": 5281363235,
+    "window": 482614478,
     "confirmed": false
   },
   "47": {
-    "start": 5755409588,
-    "window": 510645674,
-    "confirmed": false
+    "start": 5763977713,
+    "window": 484474794,
+    "confirmed": true
   },
   "48": {
-    "start": 6266055262,
-    "window": 547256516,
-    "confirmed": false
+    "start": 6260921183,
+    "window": 547484351,
+    "confirmed": true
   },
   "49": {
-    "start": 6813311778,
-    "window": 572935651,
+    "start": 6811019088,
+    "window": 586100370,
     "confirmed": true
   },
   "50": {
-    "start": 7438563286,
-    "window": 627188067,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 7421559094,
+    "window": 644223018,
+    "confirmed": false
   },
   "51": {
-    "start": 8065751352,
-    "window": 666332901,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 8065782112,
+    "window": 678199374,
+    "confirmed": false
   },
   "52": {
-    "start": 8732084253,
-    "window": 707097202,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 8743981485,
+    "window": 712469072,
+    "confirmed": false
   },
   "53": {
-    "start": 9439181455,
-    "window": 749515207,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 9456450558,
+    "window": 747032114,
+    "confirmed": false
   },
   "54": {
-    "start": 10188696661,
-    "window": 793621207,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 10203482672,
+    "window": 822005214,
+    "confirmed": true
   },
   "55": {
-    "start": 10982317868,
-    "window": 839449553,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 11034892250,
+    "window": 871379124,
+    "confirmed": true
   },
   "56": {
-    "start": 11821767421,
-    "window": 887034648,
+    "start": 11851526060,
+    "window": 892064927,
     "confirmed": false,
     "extrapolated": true
   },
   "57": {
-    "start": 12708802069,
-    "window": 936410952,
+    "start": 12743590987,
+    "window": 941926162,
     "confirmed": false,
     "extrapolated": true
   },
   "58": {
-    "start": 13645213022,
-    "window": 987612978,
+    "start": 13685517149,
+    "window": 993642202,
     "confirmed": false,
     "extrapolated": true
   },
   "59": {
-    "start": 14632826000,
-    "window": 1040675291,
+    "start": 14679159350,
+    "window": 1047248568,
     "confirmed": false,
     "extrapolated": true
   },
   "60": {
-    "start": 15673501291,
-    "window": 1095632508,
+    "start": 15726407918,
+    "window": 1102780840,
     "confirmed": false,
     "extrapolated": true
   }
@@ -878,5 +872,89 @@ const RAW_DATA = [
     "Percent": 45,
     "Damage": 5003198972,
     "Name": "Community"
+  },
+  {
+    "Level": 55,
+    "Percent": 11,
+    "Damage": 11130743954,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 55,
+    "Percent": 31,
+    "Damage": 11305019779,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 54,
+    "Percent": 66,
+    "Damage": 10746042837,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 54,
+    "Percent": 45,
+    "Damage": 10573100534,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 54,
+    "Percent": 19,
+    "Damage": 10359674661,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 47,
+    "Percent": 65,
+    "Damage": 6078886524,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 48,
+    "Percent": 27,
+    "Damage": 6406734869,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 48,
+    "Percent": 15,
+    "Damage": 6343805523,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 48,
+    "Percent": 5,
+    "Damage": 6288498422,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 47,
+    "Percent": 57,
+    "Damage": 6040128124,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 49,
+    "Percent": 58,
+    "Damage": 7151017277,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 48,
+    "Percent": 79,
+    "Damage": 6693657402,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 48,
+    "Percent": 31,
+    "Damage": 6431148202,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 48,
+    "Percent": 23,
+    "Damage": 6385632402,
+    "Name": "Unknown"
   }
 ];
