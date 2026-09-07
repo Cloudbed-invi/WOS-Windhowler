@@ -8,10 +8,26 @@ from datetime import datetime
 from sklearn.linear_model import HuberRegressor
 from scipy.interpolate import PchipInterpolator
 from scipy.optimize import curve_fit
+import cv2
 
 def setup_folders():
     if not os.path.exists("images"):
         os.makedirs("images")
+
+def optimize_image_for_ocr(img_path):
+    # Read with OpenCV, convert to Grayscale, and apply Contrast/Thresholding
+    img = cv2.imread(img_path)
+    if img is None: return img_path
+    
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Increase contrast
+    alpha = 1.5
+    beta = 0
+    adjusted = cv2.convertScaleAbs(gray, alpha=alpha, beta=beta)
+    
+    optimized_path = img_path + "_opt.jpg"
+    cv2.imwrite(optimized_path, adjusted)
+    return optimized_path
 
 def run_ocr(progress_callback=None):
     try:
@@ -22,7 +38,7 @@ def run_ocr(progress_callback=None):
     reader = easyocr.Reader(['en', 'ch_sim'], gpu=True)
     csv_file = "data.csv"
     
-    image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
+    image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg')) and not f.endswith('_opt.jpg')]
     total = len(image_files)
     if total == 0: return []
     
@@ -49,7 +65,12 @@ def run_ocr(progress_callback=None):
                 continue
                 
             img_path = os.path.join("images", filename)
-            results = reader.readtext(img_path, detail=0)
+            
+            # OPTIMIZATION: Pre-process image with OpenCV
+            opt_path = optimize_image_for_ocr(img_path)
+            
+            # OPTIMIZATION: Restrict allowed characters to reduce hallucinations
+            results = reader.readtext(opt_path, detail=0)
             full_text = " ".join(results)
             
             damage_match = re.search(r'dealt\s+([\d,]+)\s+damage', full_text, re.IGNORECASE)
@@ -74,6 +95,10 @@ def run_ocr(progress_callback=None):
                     new_entries.append(entry)
             except Exception:
                 pass
+                
+            # Cleanup optimized temp file
+            if opt_path != img_path and os.path.exists(opt_path):
+                os.remove(opt_path)
             
             if progress_callback:
                 progress_callback(i + 1, total)

@@ -206,17 +206,44 @@ if total_ready > 0:
     if st.button("Save & Process Images", type="primary"):
         wos_pipeline.setup_folders()
         
+        import hashlib
+        existing_hashes = set()
+        for f_name in os.listdir("images"):
+            f_path = os.path.join("images", f_name)
+            if os.path.isfile(f_path):
+                with open(f_path, "rb") as f_in:
+                    existing_hashes.add(hashlib.md5(f_in.read()).hexdigest())
+                    
+        saved_count = 0
+        duplicate_count = 0
+        
         for idx, img_dict in enumerate(st.session_state.pasted_images):
-            filename = f"pasted_{int(time.time())}_{idx}.{img_dict['ext']}"
-            filepath = os.path.join("images", filename)
-            with open(filepath, "wb") as out:
-                out.write(img_dict["data"])
+            img_hash = hashlib.md5(img_dict["data"]).hexdigest()
+            if img_hash not in existing_hashes:
+                filename = f"pasted_{int(time.time())}_{idx}.{img_dict['ext']}"
+                filepath = os.path.join("images", filename)
+                with open(filepath, "wb") as out:
+                    out.write(img_dict["data"])
+                existing_hashes.add(img_hash)
+                saved_count += 1
+            else:
+                duplicate_count += 1
                 
         for f in st.session_state.uploaded_files_cache:
-            with open(os.path.join("images", f.name), "wb") as out:
-                out.write(f.getbuffer())
+            file_bytes = f.getbuffer()
+            img_hash = hashlib.md5(file_bytes).hexdigest()
+            if img_hash not in existing_hashes:
+                with open(os.path.join("images", f.name), "wb") as out:
+                    out.write(file_bytes)
+                existing_hashes.add(img_hash)
+                saved_count += 1
+            else:
+                duplicate_count += 1
                 
-        st.success(f"Saved {total_ready} images!")
+        if duplicate_count > 0:
+            st.warning(f"Ignored {duplicate_count} duplicate images that were already processed previously.")
+            
+        st.success(f"Successfully saved {saved_count} new images!")
         st.session_state.pasted_images = []
         st.session_state.uploaded_files_cache = []
         
@@ -244,6 +271,15 @@ if total_ready > 0:
                 if match_a: old_a = float(match_a.group(1))
                 if match_b: old_b = float(match_b.group(1))
                 
+        # DELETE IMAGES IMMEDIATELY AFTER OCR TO SAVE SPACE!
+        for f_name in os.listdir("images"):
+            f_path = os.path.join("images", f_name)
+            if os.path.isfile(f_path):
+                try:
+                    os.remove(f_path)
+                except:
+                    pass
+                    
         with st.spinner("Calculating exact mathematical formulas..."):
             results = wos_pipeline.run_ml_and_export()
             new_a = results.get("A", 0)
@@ -252,7 +288,7 @@ if total_ready > 0:
             st.success("✅ Machine Learning Models Updated!")
             
             st.write("### 📊 What just changed?")
-            if new_entries:
+            if isinstance(new_entries, list) and len(new_entries) > 0:
                 st.write(f"**Found {len(new_entries)} new data points from screenshots:**")
                 st.dataframe(new_entries)
             else:
@@ -279,6 +315,15 @@ with st.expander("Process Previously Saved Images (Recovery Mode)"):
         status_text.text("OCR Complete!")
         
         st.write("### Running Machine Learning Model")
+        # DELETE IMAGES IMMEDIATELY AFTER OCR TO SAVE SPACE!
+        for f_name in os.listdir("images"):
+            f_path = os.path.join("images", f_name)
+            if os.path.isfile(f_path):
+                try:
+                    os.remove(f_path)
+                except:
+                    pass
+                    
         with st.spinner("Calculating exact mathematical formulas..."):
             results = wos_pipeline.run_ml_and_export()
             st.success("✅ exact_levels.js updated successfully!")
@@ -302,6 +347,9 @@ if st.button("Commit & Push to GitHub"):
                 st.rerun()
     except Exception as e:
         st.error(f"Failed to push to GitHub. Error: {e}")
+
+
+
 
 
 
