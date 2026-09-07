@@ -1,6 +1,6 @@
-const LAST_UPDATED = 'September 07, 2026 - 20:10:34';
-const EXTRAPOLATE_A = 602.3405863067817;
-const EXTRAPOLATE_B = 4.176338916521777;
+const LAST_UPDATED = 'September 07, 2026 - 21:25:45';
+const EXTRAPOLATE_A = 594.3256073827774;
+const EXTRAPOLATE_B = 4.180014256772481;
 const EXACT_LEVELS = {
   "1": {
     "start": 0,
@@ -228,13 +228,13 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "46": {
-    "start": 5281363235,
-    "window": 482614478,
+    "start": 5271883455,
+    "window": 476722272,
     "confirmed": false
   },
   "47": {
-    "start": 5763977713,
-    "window": 484474794,
+    "start": 5748605727,
+    "window": 509497905,
     "confirmed": true
   },
   "48": {
@@ -248,23 +248,23 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "50": {
-    "start": 7421559094,
-    "window": 644223018,
+    "start": 7393242274,
+    "window": 587589379,
     "confirmed": false
   },
   "51": {
-    "start": 8065782112,
-    "window": 678199374,
+    "start": 7980831654,
+    "window": 635724145,
     "confirmed": false
   },
   "52": {
-    "start": 8743981485,
-    "window": 712469072,
+    "start": 8616555798,
+    "window": 726627482,
     "confirmed": false
   },
   "53": {
-    "start": 9456450558,
-    "window": 747032114,
+    "start": 9343183280,
+    "window": 860299392,
     "confirmed": false
   },
   "54": {
@@ -273,67 +273,63 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "55": {
-    "start": 11034892250,
-    "window": 871379124,
+    "start": 11452965192,
+    "window": -415723212,
     "confirmed": true
   },
   "56": {
-    "start": 12046692309,
-    "window": 924222879,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 12529216623,
+    "window": 1003910343,
+    "confirmed": false
   },
   "57": {
-    "start": 12970915188,
-    "window": 977185808,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 13533126966,
+    "window": 899709255,
+    "confirmed": false
   },
   "58": {
-    "start": 13948100995,
-    "window": 1032191699,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 14432836221,
+    "window": 763648167,
+    "confirmed": false
   },
   "59": {
-    "start": 14980292695,
-    "window": 1089282412,
-    "confirmed": false,
-    "extrapolated": true
+    "start": 15196484388,
+    "window": 374135904,
+    "confirmed": true
   },
   "60": {
-    "start": 16069575106,
-    "window": 1148499930,
+    "start": 16096150355,
+    "window": 1151447049,
     "confirmed": false,
     "extrapolated": true
   },
   "61": {
-    "start": 17218075036,
-    "window": 1209886362,
+    "start": 17247597404,
+    "window": 1213064082,
     "confirmed": false,
     "extrapolated": true
   },
   "62": {
-    "start": 18427961398,
-    "window": 1273483942,
+    "start": 18460661486,
+    "window": 1276904383,
     "confirmed": false,
     "extrapolated": true
   },
   "63": {
-    "start": 19701445340,
-    "window": 1339335022,
+    "start": 19737565870,
+    "window": 1343010673,
     "confirmed": false,
     "extrapolated": true
   },
   "64": {
-    "start": 21040780363,
-    "window": 1407482076,
+    "start": 21080576542,
+    "window": 1411425793,
     "confirmed": false,
     "extrapolated": true
   },
   "65": {
-    "start": 22448262439,
-    "window": 1477967695,
+    "start": 22492002335,
+    "window": 1482192709,
     "confirmed": false,
     "extrapolated": true
   }
@@ -992,5 +988,47 @@ const RAW_DATA = [
     "Percent": 68.0,
     "Damage": 21055194115,
     "Name": "Admin"
+  },
+  {
+    "Level": 47,
+    "Percent": 0.0,
+    "Damage": 5748068630,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 47,
+    "Percent": 55.0,
+    "Damage": 6027952006,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 47,
+    "Percent": 40.0,
+    "Damage": 5953603835,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 55,
+    "Percent": 9.0,
+    "Damage": 11711113204,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 59,
+    "Percent": 32.0,
+    "Damage": 15318012829,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 59,
+    "Percent": 30.0,
+    "Damage": 15299108251,
+    "Name": "Unknown"
+  },
+  {
+    "Level": 59,
+    "Percent": 33.0,
+    "Damage": 15327761214,
+    "Name": "Unknown"
   }
 ];
