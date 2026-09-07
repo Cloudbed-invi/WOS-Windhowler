@@ -327,6 +327,9 @@
     box.innerHTML = `
       <div class="result-title">${fmt(damage)} Damage</div>
       <div class="result-desc">Start: ${fmt(start)} | Window: ${fmt(window)} ${warnHtml}</div>
+      <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #cce0ff; font-size: 13px; text-align: center;">
+        Data looks inaccurate? <a href="https://forms.gle/CKsANz8zpjNJWFN46" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none;">Submit your real damage to help train the AI!</a>
+      </div>
     `;
   }
 
@@ -387,6 +390,9 @@
       box.innerHTML = `
         <div class="result-title">Level ${foundLvl} at ${(foundPct * 100).toFixed(1)}%</div>
         <div class="result-desc">Based on the ML formula. ${warnHtml}</div>
+        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #cce0ff; font-size: 13px; text-align: center;">
+          Data looks inaccurate? <a href="https://forms.gle/CKsANz8zpjNJWFN46" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none;">Submit your real damage to help train the AI!</a>
+        </div>
       `;
     } else {
       box.style.display = 'block';
@@ -491,3 +497,4 @@
 
 </body>
 </html>
+
