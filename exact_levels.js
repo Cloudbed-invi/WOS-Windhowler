@@ -1,6 +1,6 @@
-const LAST_UPDATED = 'September 07, 2026 - 22:59:38';
-const EXTRAPOLATE_A = 590.0252710499568;
-const EXTRAPOLATE_B = 4.1813801175239105;
+const LAST_UPDATED = 'September 07, 2026 - 23:12:03';
+const EXTRAPOLATE_A = 588.9282809846869;
+const EXTRAPOLATE_B = 4.1818466060137025;
 const EXACT_LEVELS = {
   "1": {
     "start": 0,
@@ -8,109 +8,109 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "2": {
-    "start": 514459,
-    "window": 1549176,
+    "start": 441416,
+    "window": 1322417,
     "confirmed": false
   },
   "3": {
-    "start": 2063635,
-    "window": 2592592,
+    "start": 1763833,
+    "window": 2200673,
     "confirmed": false
   },
   "4": {
-    "start": 4656228,
-    "window": 3644707,
+    "start": 3964506,
+    "window": 3076184,
     "confirmed": false
   },
   "5": {
-    "start": 8300935,
-    "window": 4705521,
+    "start": 7040690,
+    "window": 3948949,
     "confirmed": false
   },
   "6": {
-    "start": 13006455,
-    "window": 5775033,
+    "start": 10989640,
+    "window": 4818969,
     "confirmed": false
   },
   "7": {
-    "start": 18781489,
-    "window": 6853244,
+    "start": 15808609,
+    "window": 5686244,
     "confirmed": false
   },
   "8": {
-    "start": 25634733,
-    "window": 7940154,
+    "start": 21494852,
+    "window": 6550773,
     "confirmed": false
   },
   "9": {
-    "start": 33574887,
-    "window": 9035763,
+    "start": 28045625,
+    "window": 7412556,
     "confirmed": false
   },
   "10": {
-    "start": 42610650,
-    "window": 10140071,
+    "start": 35458181,
+    "window": 8271595,
     "confirmed": false
   },
   "11": {
-    "start": 52750721,
-    "window": 11253077,
+    "start": 43729776,
+    "window": 9127888,
     "confirmed": false
   },
   "12": {
-    "start": 64003797,
-    "window": 12374782,
+    "start": 52857663,
+    "window": 9981435,
     "confirmed": false
   },
   "13": {
-    "start": 76378579,
-    "window": 13505186,
+    "start": 62839098,
+    "window": 10832237,
     "confirmed": false
   },
   "14": {
-    "start": 89883765,
-    "window": 14644288,
+    "start": 73671336,
+    "window": 11680294,
     "confirmed": false
   },
   "15": {
-    "start": 104528054,
-    "window": 15792090,
+    "start": 85351630,
+    "window": 12525605,
     "confirmed": false
   },
   "16": {
-    "start": 120320143,
-    "window": 16948590,
+    "start": 97877235,
+    "window": 13368171,
     "confirmed": false
   },
   "17": {
-    "start": 137268734,
-    "window": 18113789,
+    "start": 111245406,
+    "window": 14207992,
     "confirmed": false
   },
   "18": {
-    "start": 155382523,
-    "window": 19287687,
+    "start": 125453398,
+    "window": 15045067,
     "confirmed": false
   },
   "19": {
-    "start": 174670210,
-    "window": 20470284,
+    "start": 140498465,
+    "window": 15879397,
     "confirmed": false
   },
   "20": {
-    "start": 195140493,
-    "window": 21661579,
+    "start": 156377862,
+    "window": 16710981,
     "confirmed": false
   },
   "21": {
-    "start": 216802072,
-    "window": 22861573,
-    "confirmed": false
+    "start": 173088843,
+    "window": 35972747,
+    "confirmed": true
   },
   "22": {
-    "start": 239663645,
-    "window": 24070266,
-    "confirmed": false
+    "start": 209161321,
+    "window": 53272947,
+    "confirmed": true
   },
   "23": {
     "start": 263733911,
@@ -118,8 +118,8 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "24": {
-    "start": 314676194,
-    "window": 71923685,
+    "start": 322862469,
+    "window": 63737410,
     "confirmed": false
   },
   "25": {
@@ -298,38 +298,38 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "60": {
-    "start": 16069297730,
-    "window": 1149914880,
+    "start": 16070085282,
+    "window": 1150104017,
     "confirmed": false,
     "extrapolated": true
   },
   "61": {
-    "start": 17219212610,
-    "window": 1211477047,
+    "start": 17220189299,
+    "window": 1211685574,
     "confirmed": false,
     "extrapolated": true
   },
   "62": {
-    "start": 18430689656,
-    "window": 1275261918,
+    "start": 18431874873,
+    "window": 1275491020,
     "confirmed": false,
     "extrapolated": true
   },
   "63": {
-    "start": 19705951574,
-    "window": 1341312252,
+    "start": 19707365893,
+    "window": 1341563154,
     "confirmed": false,
     "extrapolated": true
   },
   "64": {
-    "start": 21047263827,
-    "window": 1409670934,
+    "start": 21048929047,
+    "window": 1409944898,
     "confirmed": false,
     "extrapolated": true
   },
   "65": {
-    "start": 22456934761,
-    "window": 1480380969,
+    "start": 22458873946,
+    "window": 1480679301,
     "confirmed": false,
     "extrapolated": true
   }
@@ -1042,5 +1042,35 @@ const RAW_DATA = [
     "Percent": 1.0,
     "Damage": 173466445,
     "Name": "Unknown"
+  },
+  {
+    "Level": 21,
+    "Percent": 60.0,
+    "Damage": 194675240,
+    "Name": "Admin"
+  },
+  {
+    "Level": 21,
+    "Percent": 56.0,
+    "Damage": 193211476,
+    "Name": "Admin"
+  },
+  {
+    "Level": 22,
+    "Percent": 15.0,
+    "Damage": 217152565,
+    "Name": "Admin"
+  },
+  {
+    "Level": 22,
+    "Percent": 34.0,
+    "Damage": 227119270,
+    "Name": "Admin"
+  },
+  {
+    "Level": 21,
+    "Percent": 35.0,
+    "Damage": 185782488,
+    "Name": "Admin"
   }
 ];
