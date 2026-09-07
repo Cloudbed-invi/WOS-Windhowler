@@ -331,3 +331,4 @@ if st.button("Commit & Push to GitHub"):
                 st.rerun()
     except Exception as e:
         st.error(f"Failed to push to GitHub. Error: {e}")
+
