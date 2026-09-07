@@ -26,7 +26,6 @@ def run_ocr(progress_callback=None):
     total = len(image_files)
     if total == 0: return True
     
-    # Optional: read existing CSV to prevent double-processing files
     processed_files = set()
     if os.path.exists(csv_file):
         with open(csv_file, mode='r', encoding='utf-8') as f:
@@ -36,7 +35,6 @@ def run_ocr(progress_callback=None):
                     processed_files.add(row["File"])
                     
     with open(csv_file, mode='a', newline='', encoding='utf-8') as f:
-        # Write header if file is empty
         f.seek(0, os.SEEK_END)
         if f.tell() == 0:
             writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
@@ -82,6 +80,13 @@ def run_ocr(progress_callback=None):
 def power_law(x, a, b):
     return a * np.power(x, b)
 
+def global_damage_model(X, A, B):
+    L, P = X
+    P_frac = P / 100.0
+    start = A * np.power(L, B)
+    next_start = A * np.power(L + 1.0, B)
+    return start + P_frac * (next_start - start)
+
 def run_ml_and_export():
     if not os.path.exists("data.csv"):
         return {}
@@ -90,6 +95,7 @@ def run_ml_and_export():
     levels = df['Level'].unique()
     levels.sort()
     
+    # 1. Huber Regression for exact confirmed levels (Needs 2+ points)
     exact_formulas = {}
     if 1 not in levels:
         exact_formulas[1] = {"start": 0, "window": 24300, "confirmed": True}
@@ -115,20 +121,32 @@ def run_ml_and_export():
             "confirmed": True
         }
     
+    # 2. Global Power Law Fit using ALL raw data points (even single unconfirmed dots!)
+    df_fit = df[df['Level'] > 1] # Skip lv 1 for log stability
+    if not df_fit.empty:
+        L_data = df_fit['Level'].values
+        P_data = df_fit['Percent'].values
+        D_data = df_fit['Damage'].values
+        try:
+            popt, _ = curve_fit(global_damage_model, (L_data, P_data), D_data, maxfev=10000, p0=[800, 4.0])
+            extrapolate_A = popt[0]
+            extrapolate_B = popt[1]
+        except:
+            extrapolate_A = 844.19
+            extrapolate_B = 4.0878
+    else:
+        extrapolate_A = 844.19
+        extrapolate_B = 4.0878
+    
+    # 3. Pchip Interpolation for missing exact levels up to max confirmed
     known_levels = np.array(sorted(list(exact_formulas.keys())))
     known_starts = np.array([exact_formulas[l]["start"] for l in known_levels])
+    max_known_confirmed = known_levels[-1]
     
-    fit_L = known_levels[known_levels > 1]
-    fit_S = known_starts[known_levels > 1]
-    popt, _ = curve_fit(power_law, fit_L, fit_S, maxfev=10000)
-    extrapolate_A = popt[0]
-    extrapolate_B = popt[1]
-    
-    max_known = known_levels[-1]
     interp = PchipInterpolator(known_levels, known_starts)
     
     all_levels = {}
-    for lvl in range(1, max_known + 1):
+    for lvl in range(1, max_known_confirmed + 1):
         if lvl in exact_formulas:
             all_levels[lvl] = exact_formulas[lvl]
         else:
@@ -140,7 +158,11 @@ def run_ml_and_export():
                 "confirmed": False
             }
             
-    for lvl in range(max_known + 1, 61):
+    # 4. Extrapolate up to the absolute highest dot the user has uploaded, plus a few levels buffer
+    highest_raw_level = int(df['Level'].max())
+    extrapolate_target = max(60, highest_raw_level + 2)
+    
+    for lvl in range(max_known_confirmed + 1, extrapolate_target + 1):
         start = power_law(lvl, extrapolate_A, extrapolate_B)
         next_start = power_law(lvl + 1, extrapolate_A, extrapolate_B)
         all_levels[lvl] = {
