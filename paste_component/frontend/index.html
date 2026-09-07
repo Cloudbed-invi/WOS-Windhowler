@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+  function sendMessageToStreamlitClient(type, data) {
+    window.parent.postMessage({
+      isStreamlitMessage: true,
+      type: type,
+      ...data
+    }, "*");
+  }
+  
+  sendMessageToStreamlitClient("streamlit:componentReady", {apiVersion: 1});
+
+  function handlePaste(e) {
+    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile();
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          sendMessageToStreamlitClient("streamlit:setComponentValue", {value: event.target.result});
+        };
+        reader.readAsDataURL(blob);
+        break; // Stop after first image
+      }
+    }
+  }
+
+  // Listen in iframe
+  document.addEventListener('paste', handlePaste, false);
+
+  // Attempt to listen in parent window (works if same origin)
+  try {
+    window.parent.document.addEventListener('paste', handlePaste, false);
+  } catch (err) {}
+</script>
+</body>
+</html>

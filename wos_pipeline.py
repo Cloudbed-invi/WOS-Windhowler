@@ -13,6 +13,72 @@ def setup_folders():
     if not os.path.exists("images"):
         os.makedirs("images")
 
+def run_ocr(progress_callback=None):
+    try:
+        import easyocr
+    except ImportError:
+        return False
+        
+    reader = easyocr.Reader(['en', 'ch_sim'], gpu=True)
+    csv_file = "data.csv"
+    
+    image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
+    total = len(image_files)
+    if total == 0: return True
+    
+    # Optional: read existing CSV to prevent double-processing files
+    processed_files = set()
+    if os.path.exists(csv_file):
+        with open(csv_file, mode='r', encoding='utf-8') as f:
+            reader_csv = csv.DictReader(f)
+            if "File" in reader_csv.fieldnames:
+                for row in reader_csv:
+                    processed_files.add(row["File"])
+                    
+    with open(csv_file, mode='a', newline='', encoding='utf-8') as f:
+        # Write header if file is empty
+        f.seek(0, os.SEEK_END)
+        if f.tell() == 0:
+            writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
+            writer.writeheader()
+        else:
+            writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
+            
+        for i, filename in enumerate(image_files):
+            if filename in processed_files:
+                if progress_callback: progress_callback(i + 1, total)
+                continue
+                
+            img_path = os.path.join("images", filename)
+            results = reader.readtext(img_path, detail=0)
+            full_text = " ".join(results)
+            
+            damage_match = re.search(r'dealt\s+([\d,]+)\s+damage', full_text, re.IGNORECASE)
+            percent_match = re.search(r'reaching\s+(\d+)%', full_text, re.IGNORECASE)
+            level_match = re.search(r'Lv[.,\s_]*(\d+)', full_text, re.IGNORECASE)
+            name = "Unknown"
+            if "Overview" in full_text and "Windhowler" in full_text:
+                try:
+                    name_part = full_text.split("Overview")[1].split("Windhowler")[0].strip()
+                    if name_part: name = name_part
+                except: pass
+
+            try:
+                damage = int(damage_match.group(1).replace(',', '')) if damage_match else None
+                percent = int(percent_match.group(1)) if percent_match else None
+                level = int(level_match.group(1)) if level_match else None
+                name = name.replace('J', ']') if '[' in name and 'J' in name else name
+                
+                if damage and level:
+                    writer.writerow({"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename})
+            except Exception:
+                pass
+            
+            if progress_callback:
+                progress_callback(i + 1, total)
+                
+    return True
+
 def power_law(x, a, b):
     return a * np.power(x, b)
 
@@ -52,14 +118,12 @@ def run_ml_and_export():
     known_levels = np.array(sorted(list(exact_formulas.keys())))
     known_starts = np.array([exact_formulas[l]["start"] for l in known_levels])
     
-    # Fit power law for infinite extrapolation
     fit_L = known_levels[known_levels > 1]
     fit_S = known_starts[known_levels > 1]
     popt, _ = curve_fit(power_law, fit_L, fit_S, maxfev=10000)
     extrapolate_A = popt[0]
     extrapolate_B = popt[1]
     
-    # Interpolate missing levels up to max known (e.g., 49)
     max_known = known_levels[-1]
     interp = PchipInterpolator(known_levels, known_starts)
     
@@ -76,7 +140,6 @@ def run_ml_and_export():
                 "confirmed": False
             }
             
-    # Add a few extrapolated levels up to 60 for the table view
     for lvl in range(max_known + 1, 61):
         start = power_law(lvl, extrapolate_A, extrapolate_B)
         next_start = power_law(lvl + 1, extrapolate_A, extrapolate_B)
