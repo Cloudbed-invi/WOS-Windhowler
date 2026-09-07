@@ -1,4 +1,4 @@
-const LAST_UPDATED = 'September 07, 2026 - 08:50:56';
+const LAST_UPDATED = 'September 07, 2026 - 20:08:16';
 const EXTRAPOLATE_A = 805.1016000462122;
 const EXTRAPOLATE_B = 4.100201737652852;
 const EXACT_LEVELS = {
@@ -311,650 +311,656 @@ const EXACT_LEVELS = {
 const RAW_DATA = [
   {
     "Level": 17,
-    "Percent": 29,
+    "Percent": 29.0,
     "Damage": 72423951,
     "Name": "Community"
   },
   {
     "Level": 20,
-    "Percent": 8,
+    "Percent": 8.0,
     "Damage": 143414658,
     "Name": "Community"
   },
   {
     "Level": 21,
-    "Percent": 1,
+    "Percent": 1.0,
     "Damage": 173418819,
     "Name": "Community"
   },
   {
     "Level": 22,
-    "Percent": 47,
+    "Percent": 47.0,
     "Damage": 234200050,
     "Name": "Community"
   },
   {
     "Level": 23,
-    "Percent": 47,
+    "Percent": 47.0,
     "Damage": 290435970,
     "Name": "Community"
   },
   {
     "Level": 23,
-    "Percent": 70,
+    "Percent": 70.0,
     "Damage": 303502935,
     "Name": "Community"
   },
   {
     "Level": 24,
-    "Percent": 53,
+    "Percent": 53.0,
     "Damage": 355707410,
     "Name": "Community"
   },
   {
     "Level": 25,
-    "Percent": 9,
+    "Percent": 9.0,
     "Damage": 393058820,
     "Name": "Community"
   },
   {
     "Level": 25,
-    "Percent": 14,
+    "Percent": 14.0,
     "Damage": 397026845,
     "Name": "Community"
   },
   {
     "Level": 25,
-    "Percent": 22,
+    "Percent": 22.0,
     "Damage": 402311815,
     "Name": "Community"
   },
   {
     "Level": 25,
-    "Percent": 67,
+    "Percent": 67.0,
     "Damage": 434683450,
     "Name": "Community"
   },
   {
     "Level": 26,
-    "Percent": 50,
+    "Percent": 50.0,
     "Damage": 497914590,
     "Name": "Community"
   },
   {
     "Level": 27,
-    "Percent": 17,
+    "Percent": 17.0,
     "Damage": 556221612,
     "Name": "Community"
   },
   {
     "Level": 27,
-    "Percent": 20,
+    "Percent": 20.0,
     "Damage": 559441034,
     "Name": "Community"
   },
   {
     "Level": 27,
-    "Percent": 79,
+    "Percent": 79.0,
     "Damage": 626400558,
     "Name": "Community"
   },
   {
     "Level": 28,
-    "Percent": 11,
+    "Percent": 11.0,
     "Damage": 663193137,
     "Name": "Community"
   },
   {
     "Level": 28,
-    "Percent": 16,
+    "Percent": 16.0,
     "Damage": 669205486,
     "Name": "Community"
   },
   {
     "Level": 28,
-    "Percent": 50,
+    "Percent": 50.0,
     "Damage": 710441567,
     "Name": "Community"
   },
   {
     "Level": 29,
-    "Percent": 30,
+    "Percent": 30.0,
     "Damage": 811950970,
     "Name": "Community"
   },
   {
     "Level": 29,
-    "Percent": 57,
+    "Percent": 57.0,
     "Damage": 847594114,
     "Name": "Community"
   },
   {
     "Level": 29,
-    "Percent": 72,
+    "Percent": 72.0,
     "Damage": 867834427,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 3,
+    "Percent": 3.0,
     "Damage": 901248419,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 0,
+    "Percent": 0.0,
     "Damage": 905376879,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 5,
+    "Percent": 5.0,
     "Damage": 912977123,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 11,
+    "Percent": 11.0,
     "Damage": 921055692,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 27,
+    "Percent": 27.0,
     "Damage": 944092374,
     "Name": "Community"
   },
   {
     "Level": 32,
-    "Percent": 22,
+    "Percent": 22.0,
     "Damage": 1243209406,
     "Name": "Community"
   },
   {
     "Level": 35,
-    "Percent": 25,
+    "Percent": 25.0,
     "Damage": 1812831025,
     "Name": "Community"
   },
   {
     "Level": 38,
-    "Percent": 37,
+    "Percent": 37.0,
     "Damage": 2554494393,
     "Name": "Community"
   },
   {
     "Level": 39,
-    "Percent": 27,
+    "Percent": 27.0,
     "Damage": 2799865740,
     "Name": "Community"
   },
   {
     "Level": 39,
-    "Percent": 65,
+    "Percent": 65.0,
     "Damage": 2909355975,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 22,
+    "Percent": 22.0,
     "Damage": 3079843839,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 37,
+    "Percent": 37.0,
     "Damage": 3126908935,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 40,
+    "Percent": 40.0,
     "Damage": 3136414860,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 0,
+    "Percent": 0.0,
     "Damage": 3013185586,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 5,
+    "Percent": 5.0,
     "Damage": 3026563430,
     "Name": "Community"
   },
   {
     "Level": 41,
-    "Percent": 18,
+    "Percent": 18.0,
     "Damage": 3385200438,
     "Name": "Community"
   },
   {
     "Level": 41,
-    "Percent": 37,
+    "Percent": 37.0,
     "Damage": 3445924183,
     "Name": "Community"
   },
   {
     "Level": 41,
-    "Percent": 61,
+    "Percent": 61.0,
     "Damage": 3538623829,
     "Name": "Community"
   },
   {
     "Level": 41,
-    "Percent": 67,
+    "Percent": 67.0,
     "Damage": 3546430572,
     "Name": "Community"
   },
   {
     "Level": 42,
-    "Percent": 3,
+    "Percent": 3.0,
     "Damage": 3670692073,
     "Name": "Community"
   },
   {
     "Level": 42,
-    "Percent": 6,
+    "Percent": 6.0,
     "Damage": 3681348810,
     "Name": "Community"
   },
   {
     "Level": 42,
-    "Percent": 13,
+    "Percent": 13.0,
     "Damage": 3704877077,
     "Name": "Community"
   },
   {
     "Level": 42,
-    "Percent": 14,
+    "Percent": 14.0,
     "Damage": 3709595305,
     "Name": "Community"
   },
   {
     "Level": 43,
-    "Percent": 10,
+    "Percent": 10.0,
     "Damage": 4058504133,
     "Name": "Community"
   },
   {
     "Level": 43,
-    "Percent": 39,
+    "Percent": 39.0,
     "Damage": 4168562903,
     "Name": "Community"
   },
   {
     "Level": 44,
-    "Percent": 73,
+    "Percent": 73.0,
     "Damage": 4709602412,
     "Name": "Community"
   },
   {
     "Level": 44,
-    "Percent": 93,
+    "Percent": 93.0,
     "Damage": 4790700657,
     "Name": "Community"
   },
   {
     "Level": 45,
-    "Percent": 6,
+    "Percent": 6.0,
     "Damage": 4846951073,
     "Name": "Community"
   },
   {
     "Level": 45,
-    "Percent": 41,
+    "Percent": 41.0,
     "Damage": 5003198972,
     "Name": "Community"
   },
   {
     "Level": 49,
-    "Percent": 17,
+    "Percent": 17.0,
     "Damage": 6910710348,
     "Name": "Community"
   },
   {
     "Level": 49,
-    "Percent": 27,
+    "Percent": 27.0,
     "Damage": 6968005861,
     "Name": "Community"
   },
   {
     "Level": 56,
-    "Percent": 2,
+    "Percent": 2.0,
     "Damage": 11934638223,
     "Name": "Community"
   },
   {
     "Level": 26,
-    "Percent": 77,
+    "Percent": 77.0,
     "Damage": 518646735,
     "Name": "Community"
   },
   {
     "Level": 26,
-    "Percent": 16,
+    "Percent": 16.0,
     "Damage": 470584620,
     "Name": "Community"
   },
   {
     "Level": 26,
-    "Percent": 1,
+    "Percent": 1.0,
     "Damage": 458914560,
     "Name": "Community"
   },
   {
     "Level": 27,
-    "Percent": 25,
+    "Percent": 25.0,
     "Damage": 564865635,
     "Name": "Community"
   },
   {
     "Level": 28,
-    "Percent": 22,
+    "Percent": 22.0,
     "Damage": 676949194,
     "Name": "Community"
   },
   {
     "Level": 29,
-    "Percent": 73,
+    "Percent": 73.0,
     "Damage": 869206729,
     "Name": "Community"
   },
   {
     "Level": 29,
-    "Percent": 56,
+    "Percent": 56.0,
     "Damage": 847118322,
     "Name": "Community"
   },
   {
     "Level": 29,
-    "Percent": 20,
+    "Percent": 20.0,
     "Damage": 798670082,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 32,
+    "Percent": 32.0,
     "Damage": 951557787,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 13,
+    "Percent": 13.0,
     "Damage": 923816498,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 12,
+    "Percent": 12.0,
     "Damage": 922204957,
     "Name": "Community"
   },
   {
     "Level": 30,
-    "Percent": 1,
+    "Percent": 1.0,
     "Damage": 906320690,
     "Name": "Community"
   },
   {
     "Level": 31,
-    "Percent": 76,
+    "Percent": 76.0,
     "Damage": 1169428592,
     "Name": "Community"
   },
   {
     "Level": 32,
-    "Percent": 42,
+    "Percent": 42.0,
     "Damage": 1277818431,
     "Name": "Community"
   },
   {
     "Level": 32,
-    "Percent": 8,
+    "Percent": 8.0,
     "Damage": 1220978042,
     "Name": "Community"
   },
   {
     "Level": 32,
-    "Percent": 1,
+    "Percent": 1.0,
     "Damage": 1207870410,
     "Name": "Community"
   },
   {
     "Level": 33,
-    "Percent": 8,
+    "Percent": 8.0,
     "Damage": 1390768940,
     "Name": "Community"
   },
   {
     "Level": 33,
-    "Percent": 8,
+    "Percent": 8.0,
     "Damage": 1390162486,
     "Name": "Community"
   },
   {
     "Level": 34,
-    "Percent": 24,
+    "Percent": 24.0,
     "Damage": 1608037167,
     "Name": "Community"
   },
   {
     "Level": 34,
-    "Percent": 10,
+    "Percent": 10.0,
     "Damage": 1580245074,
     "Name": "Community"
   },
   {
     "Level": 34,
-    "Percent": 6,
+    "Percent": 6.0,
     "Damage": 1572164665,
     "Name": "Community"
   },
   {
     "Level": 36,
-    "Percent": 11,
+    "Percent": 11.0,
     "Damage": 1999225319,
     "Name": "Community"
   },
   {
     "Level": 36,
-    "Percent": 7,
+    "Percent": 7.0,
     "Damage": 1989453612,
     "Name": "Community"
   },
   {
     "Level": 36,
-    "Percent": 1,
+    "Percent": 1.0,
     "Damage": 1975530429,
     "Name": "Community"
   },
   {
     "Level": 38,
-    "Percent": 51,
+    "Percent": 51.0,
     "Damage": 2591347146,
     "Name": "Community"
   },
   {
     "Level": 38,
-    "Percent": 36,
+    "Percent": 36.0,
     "Damage": 2550852025,
     "Name": "Community"
   },
   {
     "Level": 38,
-    "Percent": 24,
+    "Percent": 24.0,
     "Damage": 2517236147,
     "Name": "Community"
   },
   {
     "Level": 39,
-    "Percent": 51,
+    "Percent": 51.0,
     "Damage": 2869381096,
     "Name": "Community"
   },
   {
     "Level": 39,
-    "Percent": 24,
+    "Percent": 24.0,
     "Damage": 2792828121,
     "Name": "Community"
   },
   {
     "Level": 39,
-    "Percent": 2,
+    "Percent": 2.0,
     "Damage": 2729694860,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 23,
+    "Percent": 23.0,
     "Damage": 3084268518,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 19,
+    "Percent": 19.0,
     "Damage": 3072237542,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 16,
+    "Percent": 16.0,
     "Damage": 3062038720,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 14,
+    "Percent": 14.0,
     "Damage": 3056518900,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 13,
+    "Percent": 13.0,
     "Damage": 3054087273,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 13,
+    "Percent": 13.0,
     "Damage": 3052125362,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 11,
+    "Percent": 11.0,
     "Damage": 3047049307,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 8,
+    "Percent": 8.0,
     "Damage": 3038490601,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 4,
+    "Percent": 4.0,
     "Damage": 3025439743,
     "Name": "Community"
   },
   {
     "Level": 40,
-    "Percent": 0,
+    "Percent": 0.0,
     "Damage": 3010842193,
     "Name": "Community"
   },
   {
     "Level": 45,
-    "Percent": 45,
+    "Percent": 45.0,
     "Damage": 5003198972,
     "Name": "Community"
   },
   {
     "Level": 55,
-    "Percent": 11,
+    "Percent": 11.0,
     "Damage": 11130743954,
     "Name": "Unknown"
   },
   {
     "Level": 55,
-    "Percent": 31,
+    "Percent": 31.0,
     "Damage": 11305019779,
     "Name": "Unknown"
   },
   {
     "Level": 54,
-    "Percent": 66,
+    "Percent": 66.0,
     "Damage": 10746042837,
     "Name": "Unknown"
   },
   {
     "Level": 54,
-    "Percent": 45,
+    "Percent": 45.0,
     "Damage": 10573100534,
     "Name": "Unknown"
   },
   {
     "Level": 54,
-    "Percent": 19,
+    "Percent": 19.0,
     "Damage": 10359674661,
     "Name": "Unknown"
   },
   {
     "Level": 47,
-    "Percent": 65,
+    "Percent": 65.0,
     "Damage": 6078886524,
     "Name": "Unknown"
   },
   {
     "Level": 48,
-    "Percent": 27,
+    "Percent": 27.0,
     "Damage": 6406734869,
     "Name": "Unknown"
   },
   {
     "Level": 48,
-    "Percent": 15,
+    "Percent": 15.0,
     "Damage": 6343805523,
     "Name": "Unknown"
   },
   {
     "Level": 48,
-    "Percent": 5,
+    "Percent": 5.0,
     "Damage": 6288498422,
     "Name": "Unknown"
   },
   {
     "Level": 47,
-    "Percent": 57,
+    "Percent": 57.0,
     "Damage": 6040128124,
     "Name": "Unknown"
   },
   {
     "Level": 49,
-    "Percent": 58,
+    "Percent": 58.0,
     "Damage": 7151017277,
     "Name": "Unknown"
   },
   {
     "Level": 48,
-    "Percent": 79,
+    "Percent": 79.0,
     "Damage": 6693657402,
     "Name": "Unknown"
   },
   {
     "Level": 48,
-    "Percent": 31,
+    "Percent": 31.0,
     "Damage": 6431148202,
     "Name": "Unknown"
   },
   {
     "Level": 48,
-    "Percent": 23,
+    "Percent": 23.0,
     "Damage": 6385632402,
     "Name": "Unknown"
+  },
+  {
+    "Level": 63,
+    "Percent": 68.0,
+    "Damage": 21055194115,
+    "Name": "Admin"
   }
 ];
