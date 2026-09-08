@@ -509,7 +509,7 @@
     }
     
     html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center; font-size:16px; border-bottom: 2px solid #eee; padding-bottom: 12px;">
-               <div style="font-weight:bold; color:var(--text);">Old ML Model: ${exactBadge}</div>
+               <div style="font-weight:bold; color:var(--text);">Confirmed Fit: ${exactBadge}</div>
                <span style="font-weight:bold; font-size:18px; color:var(--text);">${exactStr}</span>
              </div>`;
              
@@ -536,7 +536,7 @@
       if (diff > 0.02) {
          html += `<div style="background:#fff3e0; border-left:4px solid #ff9800; padding:12px; font-size:13px; margin-top:12px; color:#d84315; border-radius:4px;">
                     <strong>⚠️ Curve Predictions Differ by >2%:</strong><br>The cubic-tier curve and global power-law curve diverge heavily here. 
-                    ${cubicStatus === 'Verified' ? 'Trust the <b>Verified</b> Cubic-Tier prediction.' : 'Since the cubic tier is <b>Provisional</b>, rely on the Old ML Model (Huber) if available.'}
+                    ${cubicStatus === 'Verified' ? 'Trust the <b>Verified</b> Cubic-Tier prediction.' : 'Since the cubic tier is <b>Provisional</b>, rely on the Confirmed Fit if available.'}
                   </div>`;
       }
     } else if (cubicLvl === null && plLvl !== null) {
