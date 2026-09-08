@@ -33,8 +33,12 @@ def optimize_image_for_ocr(img_path):
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
     enhanced = clahe.apply(gray)
     
+    # PHASE 1.5: Otsu's Binary Thresholding (Pure Black & White)
+    # This removes all background noise and makes text perfectly crisp for EasyOCR
+    _, thresh = cv2.threshold(enhanced, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    
     optimized_path = img_path + "_opt.jpg"
-    cv2.imwrite(optimized_path, enhanced)
+    cv2.imwrite(optimized_path, thresh)
     return optimized_path
 
 def run_ocr(progress_callback=None):
@@ -43,7 +47,7 @@ def run_ocr(progress_callback=None):
     except ImportError:
         return []
         
-    reader = easyocr.Reader(['en', 'ch_sim'], gpu=True)
+    reader = easyocr.Reader(['en'], gpu=True)
     
     image_files = [f for f in os.listdir("images") if f.lower().endswith(('.png', '.jpg', '.jpeg')) and not f.endswith('_opt.jpg')]
     total = len(image_files)
