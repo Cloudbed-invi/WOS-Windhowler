@@ -75,6 +75,8 @@ def check_window_shift(level, percent, damage):
     """
     Temporarily refits the Huber regression for a confirmed level including the new point.
     Returns the percentage shift in the window coefficient.
+    Note: Since the baseline data is strictly verified, a large shift 
+    indicates the incoming submission is a vast outlier (e.g. from a different account).
     """
     import pandas as pd
     import numpy as np
