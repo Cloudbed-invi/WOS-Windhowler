@@ -112,7 +112,7 @@ def check_window_shift(level, percent, damage):
     except:
         return 0.0
 
-def run_ocr(progress_callback=None):
+def run_ocr(progress_callback=None, write_to_csv=True):
     try:
         import easyocr
     except ImportError:
@@ -197,7 +197,7 @@ def run_ocr(progress_callback=None):
                 }
                 
                 # If automated CLI is running, separate them. If dashboard, dashboard handles it.
-                if flag_reason:
+                if flag_reason and write_to_csv:
                     with open("needs_review.csv", mode='a', newline='', encoding='utf-8') as f:
                         writer = csv.DictWriter(f, fieldnames=["File","Level","Percent","Damage","Confidence","Flag_Reason"])
                         writer.writerow({

@@ -285,7 +285,7 @@ if total_ready > 0:
             progress_bar.progress(current / total)
             status_text.text(f"Processing image {current} of {total}...")
             
-        new_entries = wos_pipeline.run_ocr(progress_callback=update_progress)
+        new_entries = wos_pipeline.run_ocr(progress_callback=update_progress, write_to_csv=False)
         status_text.text("OCR Complete!")
         
         if isinstance(new_entries, list) and len(new_entries) > 0:
@@ -439,13 +439,17 @@ with tab_flag:
 with tab_fit:
     st.subheader("Tier Boundaries & Plot")
     import wos_pipeline
-    import matplotlib.pyplot as plt
     import numpy as np
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        st.warning("matplotlib not installed — install it to see this chart.")
+        plt = None
     
     config = wos_pipeline.load_formulas()
     tiers = config.get("TIER_FORMULAS", [])
     
-    if os.path.exists("data.csv"):
+    if os.path.exists("data.csv") and plt is not None:
         df = pd.read_csv("data.csv")
         fig, ax = plt.subplots(figsize=(10, 5))
         ax.scatter(df["Level"] + df["Percent"]/100, df["Damage"], color="blue", label="Raw Data", s=10, alpha=0.5)
