@@ -97,9 +97,9 @@ if "form_valid" in st.session_state:
                 st.dataframe(st.session_state.form_valid)
                 if st.button("Merge Valid Data & Run ML", type="primary"):
                     with open("data.csv", mode='a', newline='', encoding='utf-8') as f:
-                        writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
+                        writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage", "Confidence"])
                         for v in st.session_state.form_valid:
-                            writer.writerow({"File": "GoogleForm", "Name": "Community", "Level": v["Level"], "Percent": v["Percent"], "Damage": int(v["Damage"])})
+                            writer.writerow({"File": "GoogleForm", "Name": "Community", "Level": v["Level"], "Percent": v["Percent"], "Damage": int(v["Damage"]), "Confidence": ""})
                     
                     st.session_state.form_valid = []
                     
@@ -145,13 +145,14 @@ with st.form("manual_entry_form", clear_on_submit=True):
             
         if man_level > 0 and man_damage > 0:
             with open("data.csv", mode='a', newline='', encoding='utf-8') as f:
-                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
+                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage", "Confidence"])
                 writer.writerow({
                     "File": "ManualEntry", 
                     "Name": "Admin", 
                     "Level": int(man_level), 
                     "Percent": float(man_percent), 
-                    "Damage": int(man_damage)
+                    "Damage": int(man_damage),
+                    "Confidence": ""
                 })
             
             with st.spinner("Recalculating AI formulas..."):
@@ -309,9 +310,9 @@ if pending_data is not None:
     c1, c2 = st.columns(2)
     with c1:
         if st.button("✅ Approve & Publish to AI Model", type="primary"):
-            # Save approved data to CSV (ignoring Confidence/Flag columns to keep master data pure)
+            # Save approved data to CSV (now preserving Confidence per user request)
             with open("data.csv", mode='a', newline='', encoding='utf-8') as f:
-                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"]) # Keep Name in header for backward compatibility with existing csv
+                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage", "Confidence"]) # Added Confidence
                 for row in edited_df:
                     if row.get("Level") and row.get("Damage") and row.get("Percent") is not None:
                         writer.writerow({
@@ -319,7 +320,8 @@ if pending_data is not None:
                             "Name": "Anonymous",
                             "Level": int(row["Level"]),
                             "Percent": float(row["Percent"]),
-                            "Damage": int(row["Damage"])
+                            "Damage": int(row["Damage"]),
+                            "Confidence": row.get("Confidence", "")
                         })
             
             with st.spinner("Recalculating AI formulas..."):
