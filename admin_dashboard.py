@@ -56,7 +56,7 @@ if st.button("Fetch & Analyze Responses"):
                 
                 # Tier-Aware AI Curve Sanity Check
                 import wos_pipeline
-                expected_start, is_prov, is_fallback = wos_pipeline.get_expected_damage(lvl)
+                expected_start, t_status, tol = wos_pipeline.get_expected_damage(lvl)
                 expected_next, _, _ = wos_pipeline.get_expected_damage(lvl + 1)
                 expected = expected_start + (pct / 100.0) * (expected_next - expected_start)
                 
@@ -70,15 +70,15 @@ if st.button("Fetch & Analyze Responses"):
                     "Timestamp": row['Timestamp']
                 }
                 
-                # Dynamic tolerance based on tier confidence
-                tolerance = 0.50 if (is_prov or is_fallback) else 0.15
-                
-                if error_margin <= tolerance:
-                    valid.append(item)
-                else:
-                    status_str = "Provisional Tier/Fallback" if (is_prov or is_fallback) else "Confirmed Tier"
-                    item["Reason"] = f"{status_str} > {int(tolerance*100)}%"
+                if t_status == "EXTRAPOLATED":
+                    item["Reason"] = f"No tier fit for level {lvl} - manual review required"
                     flagged.append(item)
+                elif error_margin > tol:
+                    tier_name = "Confirmed" if t_status == "CONFIRMED" else "Provisional"
+                    item["Reason"] = f"{tier_name} tier: {error_margin*100:.1f}% deviation exceeds {int(tol*100)}% threshold"
+                    flagged.append(item)
+                else:
+                    valid.append(item)
             except Exception as e:
                 continue
                 
