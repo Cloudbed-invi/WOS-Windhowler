@@ -71,6 +71,47 @@ def get_expected_damage(level):
     expected = A * np.power(level, B)
     return expected, "EXTRAPOLATED", 0.0 # 0 tolerance triggers unconditional review
 
+def check_window_shift(level, percent, damage):
+    """
+    Temporarily refits the Huber regression for a confirmed level including the new point.
+    Returns the percentage shift in the window coefficient.
+    """
+    import pandas as pd
+    import numpy as np
+    import os
+    from sklearn.linear_model import HuberRegressor
+    
+    expected_start, status, _ = get_expected_damage(level)
+    if status != "CONFIRMED":
+        return 0.0
+        
+    expected_next, _, _ = get_expected_damage(level + 1)
+    old_window = expected_next - expected_start
+    
+    if old_window <= 0:
+        return 0.0
+        
+    if not os.path.exists("data.csv"):
+        return 0.0
+        
+    df = pd.read_csv("data.csv")
+    level_data = df[df['Level'] == level]
+    
+    if len(level_data["Percent"].unique()) < 2:
+        return 0.0
+        
+    X_new = np.append(level_data['Percent'].values, percent).reshape(-1, 1) / 100.0
+    y_new = np.append(level_data['Damage'].values, damage)
+    
+    try:
+        y_scaled = y_new / 1_000_000.0
+        huber = HuberRegressor(epsilon=1.35).fit(X_new, y_scaled)
+        new_window = huber.coef_[0] * 1_000_000.0
+        shift = abs(new_window - old_window) / old_window
+        return float(shift)
+    except:
+        return 0.0
+
 def run_ocr(progress_callback=None):
     try:
         import easyocr
@@ -137,6 +178,12 @@ def run_ocr(progress_callback=None):
                     elif error > tol:
                         tier_name = "Confirmed" if t_status == "CONFIRMED" else "Provisional"
                         flags.append(f"{tier_name} tier: {error*100:.1f}% deviation exceeds {int(tol*100)}% threshold")
+                        
+                    # Window Shift Check
+                    if t_status == "CONFIRMED":
+                        shift = check_window_shift(level, percent, damage)
+                        if shift > 0.05:
+                            flags.append(f"window shift: {shift*100:.1f}% - possible different account")
                 
                 flag_reason = " | ".join(flags) if flags else ""
                 

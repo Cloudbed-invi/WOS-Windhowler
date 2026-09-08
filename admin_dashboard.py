@@ -78,7 +78,19 @@ if st.button("Fetch & Analyze Responses"):
                     item["Reason"] = f"{tier_name} tier: {error_margin*100:.1f}% deviation exceeds {int(tol*100)}% threshold"
                     flagged.append(item)
                 else:
-                    valid.append(item)
+                    # Window Shift Check
+                    shift = 0.0
+                    if t_status == "CONFIRMED":
+                        try:
+                            shift = wos_pipeline.check_window_shift(lvl, pct, dmg)
+                        except:
+                            pass
+                    
+                    if shift > 0.05:
+                        item["Reason"] = f"window shift: {shift*100:.1f}% - possible different account"
+                        flagged.append(item)
+                    else:
+                        valid.append(item)
             except Exception as e:
                 continue
                 
