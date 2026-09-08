@@ -43,6 +43,28 @@ def optimize_image_for_ocr(img_path):
     cv2.imwrite(optimized_path, thresh)
     return optimized_path
 
+def load_formulas():
+    import json, os
+    try:
+        with open("formulas.json", "r") as f:
+            return json.load(f)
+    except:
+        return {"A": 591.44, "B": 4.18, "TIER_FORMULAS": []}
+
+def get_expected_damage(level):
+    import numpy as np
+    config = load_formulas()
+    for tier in config.get("TIER_FORMULAS", []):
+        if tier["range"][0] <= level <= tier["range"][1]:
+            c = tier["coeffs"]
+            expected = c[0]*(level**3) + c[1]*(level**2) + c[2]*level + c[3]
+            return expected, tier.get("provisional", True), False
+            
+    A = config.get("A", 591.44)
+    B = config.get("B", 4.18)
+    expected = A * np.power(level, B)
+    return expected, True, True
+
 def run_ocr(progress_callback=None):
     try:
         import easyocr
@@ -96,12 +118,17 @@ def run_ocr(progress_callback=None):
                 if avg_conf < 0.70:
                     flags.append(f"Low OCR Confidence ({avg_conf:.2f})")
                 
-                # Check expected damage boundary (Monotonic/Curve Deviation Check)
-                expected = 602.34 * np.power(level, 4.1763)
+                # Check expected damage using tier-aware formulas
+                expected_start, is_provisional, is_fallback = get_expected_damage(level)
+                expected_next, _, _ = get_expected_damage(level + 1)
+                expected = expected_start + (percent / 100.0) * (expected_next - expected_start)
                 if expected > 0:
                     error = abs(damage - expected) / expected
-                    if error > 0.50:  # If it deviates wildly (50%+) from the baseline power curve
-                        flags.append(f"Curve Deviation > 50% (Expected ~{int(expected)})")
+                    tolerance = 0.50 if (is_provisional or is_fallback) else 0.25
+                    
+                    if error > tolerance:
+                        tier_status = "Provisional Tier/Fallback" if (is_provisional or is_fallback) else "Confirmed Tier"
+                        flags.append(f"{tier_status} Deviation > {int(tolerance*100)}% (Expected ~{int(expected)})")
                 
                 flag_reason = " | ".join(flags) if flags else ""
                 
@@ -421,6 +448,16 @@ def run_ml_and_export():
     
     with open("exact_levels.js", "w", encoding="utf-8") as f:
         f.write(js_content)
+        
+    formulas_config = {
+        "A": extrapolate_A,
+        "B": extrapolate_B,
+        "TIER_BOUNDARIES": tier_boundaries,
+        "BOUNDARY_METADATA": boundary_metadata,
+        "TIER_FORMULAS": tier_formulas
+    }
+    with open("formulas.json", "w", encoding="utf-8") as f:
+        json.dump(formulas_config, f, indent=2)
         
     return {
         "levels": all_levels,

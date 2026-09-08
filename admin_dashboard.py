@@ -54,10 +54,11 @@ if st.button("Fetch & Analyze Responses"):
                 if is_duplicate:
                     continue
                 
-                # AI Curve Sanity Check (Power Law: 844.19 * L^4.0878)
-                start = 844.19 * (lvl ** 4.0878)
-                next_start = 844.19 * ((lvl + 1) ** 4.0878)
-                expected = start + (pct / 100.0) * (next_start - start)
+                # Tier-Aware AI Curve Sanity Check
+                import wos_pipeline
+                expected_start, is_prov, is_fallback = wos_pipeline.get_expected_damage(lvl)
+                expected_next, _, _ = wos_pipeline.get_expected_damage(lvl + 1)
+                expected = expected_start + (pct / 100.0) * (expected_next - expected_start)
                 
                 error_margin = abs(dmg - expected) / expected
                 
@@ -69,10 +70,14 @@ if st.button("Fetch & Analyze Responses"):
                     "Timestamp": row['Timestamp']
                 }
                 
-                # 15% tolerance for new submissions
-                if error_margin <= 0.15:
+                # Dynamic tolerance based on tier confidence
+                tolerance = 0.50 if (is_prov or is_fallback) else 0.15
+                
+                if error_margin <= tolerance:
                     valid.append(item)
                 else:
+                    status_str = "Provisional Tier/Fallback" if (is_prov or is_fallback) else "Confirmed Tier"
+                    item["Reason"] = f"{status_str} > {int(tolerance*100)}%"
                     flagged.append(item)
             except Exception as e:
                 continue

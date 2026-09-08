@@ -1,0 +1,50 @@
+{
+  "A": 591.446648842496,
+  "B": 4.1807398778742275,
+  "TIER_BOUNDARIES": [
+    34
+  ],
+  "BOUNDARY_METADATA": {
+    "34": {
+      "stable": true,
+      "pelt_disagree": true,
+      "pelt_suggestions": [
+        39
+      ]
+    }
+  },
+  "TIER_FORMULAS": [
+    {
+      "range": [
+        21,
+        34
+      ],
+      "coeffs": [
+        141649.1459923414,
+        -4882816.297899229,
+        61879299.12207788,
+        -247008060.93600717
+      ],
+      "max_error_pct": 2.59,
+      "loocv_max_pct": 8.08,
+      "n_points": 12,
+      "provisional": true
+    },
+    {
+      "range": [
+        36,
+        59
+      ],
+      "coeffs": [
+        254827.21853468296,
+        -18219758.781696904,
+        555867323.4377099,
+        -6075117885.169104
+      ],
+      "max_error_pct": 0.78,
+      "loocv_max_pct": 2.36,
+      "n_points": 16,
+      "provisional": false
+    }
+  ]
+}
