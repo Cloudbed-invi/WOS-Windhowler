@@ -293,12 +293,12 @@ if st.session_state.pending_ocr is not None:
         if st.button("✅ Approve & Publish to AI Model", type="primary"):
             # Save approved data to CSV (ignoring Confidence/Flag columns to keep master data pure)
             with open("data.csv", mode='a', newline='', encoding='utf-8') as f:
-                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
+                writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"]) # Keep Name in header for backward compatibility with existing csv
                 for row in edited_df:
                     if row.get("Level") and row.get("Damage") and row.get("Percent") is not None:
                         writer.writerow({
                             "File": row.get("File", "Unknown"),
-                            "Name": row.get("Name", "Community"),
+                            "Name": "Anonymous",
                             "Level": int(row["Level"]),
                             "Percent": float(row["Percent"]),
                             "Damage": int(row["Damage"])

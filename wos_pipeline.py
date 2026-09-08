@@ -63,12 +63,7 @@ def run_ocr(progress_callback=None):
         percent_match = re.search(r'reaching\s+(\d+)%', full_text, re.IGNORECASE)
         level_match = re.search(r'Lv[.,\s_]*(\d+)', full_text, re.IGNORECASE)
         
-        name = "Unknown"
-        if "Overview" in full_text and "Windhowler" in full_text:
-            try:
-                name_part = full_text.split("Overview")[1].split("Windhowler")[0].strip()
-                if name_part: name = name_part
-            except: pass
+        
 
         try:
             damage_str = damage_match.group(1) if damage_match else None
@@ -77,7 +72,7 @@ def run_ocr(progress_callback=None):
             percent = int(percent_str) if percent_str else None
             level_str = level_match.group(1) if level_match else None
             level = int(level_str) if level_str else None
-            name = name.replace('J', ']') if '[' in name and 'J' in name else name
+            
             
             # Calculate targeted OCR Confidence
             confidences = []
@@ -117,9 +112,9 @@ def run_ocr(progress_callback=None):
                 # If automated CLI is running, separate them. If dashboard, dashboard handles it.
                 if flag_reason:
                     with open("needs_review.csv", mode='a', newline='', encoding='utf-8') as f:
-                        writer = csv.DictWriter(f, fieldnames=["File","Name","Level","Percent","Damage","Confidence","Flag_Reason"])
+                        writer = csv.DictWriter(f, fieldnames=["File","Level","Percent","Damage","Confidence","Flag_Reason"])
                         writer.writerow({
-                            "File": filename, "Name": name, "Level": level, "Percent": percent, 
+                            "File": filename, "Level": level, "Percent": percent, 
                             "Damage": damage, "Confidence": round(avg_conf, 3), "Flag_Reason": flag_reason
                         })
                 
@@ -228,7 +223,7 @@ def run_ml_and_export():
         }
         
     last_updated = datetime.now().strftime("%B %d, %Y - %H:%M:%S")
-    raw_data = df[['Level', 'Percent', 'Damage', 'Name']].to_dict(orient='records')
+    raw_data = df[['Level', 'Percent', 'Damage']].to_dict(orient='records')
     
     js_content = f"const LAST_UPDATED = '{last_updated}';\n"
     js_content += f"const EXTRAPOLATE_A = {extrapolate_A};\n"
