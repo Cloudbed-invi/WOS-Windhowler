@@ -164,8 +164,19 @@ if "seen_hashes" not in st.session_state:
     st.session_state.seen_hashes = set()
 if "uploaded_files_cache" not in st.session_state:
     st.session_state.uploaded_files_cache = []
-if "pending_ocr" not in st.session_state:
-    st.session_state.pending_ocr = None
+import json
+def get_pending_ocr():
+    if os.path.exists("pending_ocr.json"):
+        try:
+            with open("pending_ocr.json", "r") as f:
+                return json.load(f)
+        except:
+            return None
+    return None
+
+def clear_pending_ocr():
+    if os.path.exists("pending_ocr.json"):
+        os.remove("pending_ocr.json")
 
 st.subheader("📸 Process Screenshots")
 st.info("💡 **Magic Paste:** Simply click anywhere on this page and press **Ctrl+V** on your keyboard to paste a screenshot! No popup will open.")
@@ -260,10 +271,11 @@ if total_ready > 0:
         status_text.text("OCR Complete!")
         
         if isinstance(new_entries, list) and len(new_entries) > 0:
-            st.session_state.pending_ocr = new_entries
+            with open("pending_ocr.json", "w") as f:
+                json.dump(new_entries, f)
         else:
             st.warning("No readable data could be extracted from those images.")
-            st.session_state.pending_ocr = None
+            clear_pending_ocr()
             
         # DELETE IMAGES IMMEDIATELY AFTER OCR TO SAVE SPACE!
         for f_name in os.listdir("images"):
@@ -276,17 +288,18 @@ if total_ready > 0:
         st.rerun()
 
 # --- REVIEW PENDING OCR ---
-if st.session_state.pending_ocr is not None:
+pending_data = get_pending_ocr()
+if pending_data is not None:
     st.write("---")
     st.subheader("🧐 Review Extracted Data")
     
-    has_flags = any(r.get("Flag") for r in st.session_state.pending_ocr)
+    has_flags = any(r.get("Flag") for r in pending_data)
     if has_flags:
         st.warning("⚠️ Some OCR reads were flagged due to low confidence or failing sanity checks. Please review them carefully!")
     else:
         st.info("The OCR extracted the following data. Verify it is correct before publishing.")
         
-    edited_df = st.data_editor(st.session_state.pending_ocr, num_rows="dynamic")
+    edited_df = st.data_editor(pending_data, num_rows="dynamic")
     
     c1, c2 = st.columns(2)
     with c1:
@@ -308,13 +321,13 @@ if st.session_state.pending_ocr is not None:
                 wos_pipeline.run_ml_and_export()
                 
             st.success("✅ Data Approved and AI Model Updated!")
-            st.session_state.pending_ocr = None
+            clear_pending_ocr()
             time.sleep(2)
             st.rerun()
             
     with c2:
         if st.button("❌ Discard All"):
-            st.session_state.pending_ocr = None
+            clear_pending_ocr()
             st.rerun()
 
 st.divider()
