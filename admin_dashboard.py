@@ -279,14 +279,19 @@ if total_ready > 0:
 if st.session_state.pending_ocr is not None:
     st.write("---")
     st.subheader("🧐 Review Extracted Data")
-    st.info("The OCR extracted the following data. Verify it is correct before publishing.")
     
+    has_flags = any(r.get("Flag") for r in st.session_state.pending_ocr)
+    if has_flags:
+        st.warning("⚠️ Some OCR reads were flagged due to low confidence or failing sanity checks. Please review them carefully!")
+    else:
+        st.info("The OCR extracted the following data. Verify it is correct before publishing.")
+        
     edited_df = st.data_editor(st.session_state.pending_ocr, num_rows="dynamic")
     
     c1, c2 = st.columns(2)
     with c1:
         if st.button("✅ Approve & Publish to AI Model", type="primary"):
-            # Save approved data to CSV
+            # Save approved data to CSV (ignoring Confidence/Flag columns to keep master data pure)
             with open("data.csv", mode='a', newline='', encoding='utf-8') as f:
                 writer = csv.DictWriter(f, fieldnames=["File", "Name", "Level", "Percent", "Damage"])
                 for row in edited_df:

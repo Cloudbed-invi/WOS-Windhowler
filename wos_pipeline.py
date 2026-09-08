@@ -13,20 +13,28 @@ import cv2
 def setup_folders():
     if not os.path.exists("images"):
         os.makedirs("images")
+    if not os.path.exists("needs_review.csv"):
+        with open("needs_review.csv", "w", encoding="utf-8") as f:
+            f.write("File,Name,Level,Percent,Damage,Confidence,Flag_Reason\n")
 
 def optimize_image_for_ocr(img_path):
-    # Read with OpenCV, convert to Grayscale, and apply Contrast/Thresholding
     img = cv2.imread(img_path)
     if img is None: return img_path
     
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Increase contrast
-    alpha = 1.5
-    beta = 0
-    adjusted = cv2.convertScaleAbs(gray, alpha=alpha, beta=beta)
+    # PHASE 1: Upscale 2x using cubic interpolation
+    width = int(img.shape[1] * 2)
+    height = int(img.shape[0] * 2)
+    img_up = cv2.resize(img, (width, height), interpolation=cv2.INTER_CUBIC)
+    
+    # PHASE 1: Convert to Grayscale
+    gray = cv2.cvtColor(img_up, cv2.COLOR_BGR2GRAY)
+    
+    # PHASE 1: CLAHE Contrast Enhancement
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+    enhanced = clahe.apply(gray)
     
     optimized_path = img_path + "_opt.jpg"
-    cv2.imwrite(optimized_path, adjusted)
+    cv2.imwrite(optimized_path, enhanced)
     return optimized_path
 
 def run_ocr(progress_callback=None):
@@ -42,47 +50,92 @@ def run_ocr(progress_callback=None):
     if total == 0: return []
     
     new_entries = []
+    
     for i, filename in enumerate(image_files):
         img_path = os.path.join("images", filename)
-            
-            # OPTIMIZATION: Pre-process image with OpenCV
-            opt_path = optimize_image_for_ocr(img_path)
-            
-            # OPTIMIZATION: Restrict allowed characters to reduce hallucinations
-            results = reader.readtext(opt_path, detail=0)
-            full_text = " ".join(results)
-            
-            damage_match = re.search(r'dealt\s+([\d,]+)\s+damage', full_text, re.IGNORECASE)
-            percent_match = re.search(r'reaching\s+(\d+)%', full_text, re.IGNORECASE)
-            level_match = re.search(r'Lv[.,\s_]*(\d+)', full_text, re.IGNORECASE)
-            name = "Unknown"
-            if "Overview" in full_text and "Windhowler" in full_text:
-                try:
-                    name_part = full_text.split("Overview")[1].split("Windhowler")[0].strip()
-                    if name_part: name = name_part
-                except: pass
-
+        opt_path = optimize_image_for_ocr(img_path)
+        
+        # detail=1 returns (bbox, text, probability)
+        results = reader.readtext(opt_path, detail=1)
+        full_text = " ".join([res[1] for res in results])
+        
+        damage_match = re.search(r'dealt\s+([\d,]+)\s+damage', full_text, re.IGNORECASE)
+        percent_match = re.search(r'reaching\s+(\d+)%', full_text, re.IGNORECASE)
+        level_match = re.search(r'Lv[.,\s_]*(\d+)', full_text, re.IGNORECASE)
+        
+        name = "Unknown"
+        if "Overview" in full_text and "Windhowler" in full_text:
             try:
-                damage = int(damage_match.group(1).replace(',', '')) if damage_match else None
-                percent = int(percent_match.group(1)) if percent_match else None
-                level = int(level_match.group(1)) if level_match else None
-                name = name.replace('J', ']') if '[' in name and 'J' in name else name
-                
-                if damage and level and percent is not None:
-                    entry = {"Name": name, "Level": level, "Percent": percent, "Damage": damage, "File": filename}
-                    new_entries.append(entry)
-            except Exception:
-                pass
-                
-            # Cleanup optimized temp file
-            if opt_path != img_path and os.path.exists(opt_path):
-                os.remove(opt_path)
+                name_part = full_text.split("Overview")[1].split("Windhowler")[0].strip()
+                if name_part: name = name_part
+            except: pass
+
+        try:
+            damage_str = damage_match.group(1) if damage_match else None
+            damage = int(damage_str.replace(',', '')) if damage_str else None
+            percent_str = percent_match.group(1) if percent_match else None
+            percent = int(percent_str) if percent_str else None
+            level_str = level_match.group(1) if level_match else None
+            level = int(level_str) if level_str else None
+            name = name.replace('J', ']') if '[' in name and 'J' in name else name
             
-            if progress_callback:
-                progress_callback(i + 1, total)
+            # Calculate targeted OCR Confidence
+            confidences = []
+            for bbox, text, prob in results:
+                if (damage_str and damage_str in text) or \
+                   (percent_str and percent_str in text) or \
+                   (level_str and level_str in text):
+                    confidences.append(prob)
+            
+            avg_conf = sum(confidences) / len(confidences) if confidences else 0.0
+            
+            if damage and level and percent is not None:
+                # Sanity Checks
+                flags = []
+                if avg_conf < 0.70:
+                    flags.append(f"Low OCR Confidence ({avg_conf:.2f})")
                 
+                # Check expected damage boundary (Monotonic/Curve Deviation Check)
+                expected = 602.34 * np.power(level, 4.1763)
+                if expected > 0:
+                    error = abs(damage - expected) / expected
+                    if error > 0.50:  # If it deviates wildly (50%+) from the baseline power curve
+                        flags.append(f"Curve Deviation > 50% (Expected ~{int(expected)})")
+                
+                flag_reason = " | ".join(flags) if flags else ""
+                
+                entry = {
+                    "File": filename,
+                    "Name": name, 
+                    "Level": level, 
+                    "Percent": percent, 
+                    "Damage": damage, 
+                    "Confidence": round(avg_conf, 3),
+                    "Flag": flag_reason
+                }
+                
+                # If automated CLI is running, separate them. If dashboard, dashboard handles it.
+                if flag_reason:
+                    with open("needs_review.csv", mode='a', newline='', encoding='utf-8') as f:
+                        writer = csv.DictWriter(f, fieldnames=["File","Name","Level","Percent","Damage","Confidence","Flag_Reason"])
+                        writer.writerow({
+                            "File": filename, "Name": name, "Level": level, "Percent": percent, 
+                            "Damage": damage, "Confidence": round(avg_conf, 3), "Flag_Reason": flag_reason
+                        })
+                
+                new_entries.append(entry)
+        except Exception as e:
+            pass
+            
+        if opt_path != img_path and os.path.exists(opt_path):
+            os.remove(opt_path)
+        
+        if progress_callback:
+            progress_callback(i + 1, total)
+            
     return new_entries
 
+# Keep remainder of ML pipeline intact for this phase...
 def power_law(x, a, b):
     return a * np.power(x, b)
 
@@ -195,5 +248,3 @@ def run_ml_and_export():
 if __name__ == "__main__":
     setup_folders()
     run_ml_and_export()
-
-
