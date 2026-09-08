@@ -369,6 +369,23 @@ with tab_cov:
             st.write("data.csv is empty.")
     else:
         st.write("data.csv not found.")
+        
+    st.divider()
+    st.subheader("Adjacent Huber Fit Mismatches")
+    st.write("Diagnostic check: validates if the end of level N perfectly connects to the start of level N+1 using the raw Huber Regression data.")
+    
+    import wos_pipeline
+    config = wos_pipeline.load_formulas()
+    mismatches = config.get("ADJACENT_MISMATCHES", [])
+    
+    if mismatches:
+        df_mis = pd.DataFrame(mismatches)
+        def highlight_mismatch(row):
+            color = 'background-color: #ffcccc; color: #900' if row['Flagged'] else ''
+            return [color]*len(row)
+        st.dataframe(df_mis.style.apply(highlight_mismatch, axis=1), use_container_width=True)
+    else:
+        st.success("No adjacent pairs found to check.")
 
 with tab_flag:
     st.subheader("Needs Review (Flagged OCR & Syncs)")
