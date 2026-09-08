@@ -1,4 +1,4 @@
-const LAST_UPDATED = 'September 08, 2026 - 10:17:14';
+const LAST_UPDATED = 'September 08, 2026 - 10:19:30';
 const EXTRAPOLATE_A = 591.446648842496;
 const EXTRAPOLATE_B = 4.1807398778742275;
 const TIER_BOUNDARIES = [34];
@@ -16,8 +16,9 @@ const TIER_FORMULAS = [
       -247008060.93600717
     ],
     "max_error_pct": 2.59,
+    "loocv_max_pct": 8.08,
     "n_points": 12,
-    "provisional": false
+    "provisional": true
   },
   {
     "range": [
@@ -31,6 +32,7 @@ const TIER_FORMULAS = [
       -6075117885.169104
     ],
     "max_error_pct": 0.78,
+    "loocv_max_pct": 2.36,
     "n_points": 16,
     "provisional": false
   }

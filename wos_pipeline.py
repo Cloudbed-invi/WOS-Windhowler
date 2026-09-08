@@ -146,6 +146,21 @@ def global_damage_model(X, A, B):
     next_start = A * np.power(L + 1.0, B)
     return start + P_frac * (next_start - start)
 
+def calc_loocv(L_seg, y_seg):
+    n = len(L_seg)
+    if n < 5: return float('inf'), float('inf')
+    errors = []
+    for i in range(n):
+        L_train = np.delete(L_seg, i)
+        y_train = np.delete(y_seg, i)
+        L_test = L_seg[i]
+        y_test = y_seg[i]
+        weights = 1.0 / y_train
+        coeffs = np.polyfit(L_train, y_train, 3, w=weights)
+        pred = np.poly1d(coeffs)(L_test)
+        errors.append(abs(pred - y_test) / y_test)
+    return float(np.max(errors)), float(np.mean(errors))
+
 def fit_cubic_weighted(L, y):
     if len(L) < 4: return None, float('inf'), float('inf'), float('inf')
     weights = 1.0 / y
@@ -312,12 +327,15 @@ def run_ml_and_export():
             y_seg = confirmed_EndHP[start_idx:idx]
             if len(L_seg) > 0:
                 c, tot, max_err, _ = fit_cubic_weighted(L_seg, y_seg)
+                loocv_max, loocv_mean = calc_loocv(L_seg, y_seg)
+                prov = len(L_seg) < MIN_PTS or loocv_max > 0.03 # 3% LOOCV threshold
                 tier_formulas.append({
                     "range": [int(L_seg[0]), int(L_seg[-1])],
                     "coeffs": c if c else [],
                     "max_error_pct": round(max_err * 100, 2) if c else 0.0,
+                    "loocv_max_pct": round(loocv_max * 100, 2) if loocv_max != float('inf') else 999.0,
                     "n_points": len(L_seg),
-                    "provisional": len(L_seg) < MIN_PTS
+                    "provisional": prov
                 })
             start_idx = idx
             
@@ -326,12 +344,15 @@ def run_ml_and_export():
         y_seg = confirmed_EndHP[start_idx:]
         if len(L_seg) > 0:
             c, tot, max_err, _ = fit_cubic_weighted(L_seg, y_seg)
+            loocv_max, loocv_mean = calc_loocv(L_seg, y_seg)
+            prov = len(L_seg) < MIN_PTS or loocv_max > 0.03
             tier_formulas.append({
                 "range": [int(L_seg[0]), int(L_seg[-1])],
                 "coeffs": c if c else [],
                 "max_error_pct": round(max_err * 100, 2) if c else 0.0,
+                "loocv_max_pct": round(loocv_max * 100, 2) if loocv_max != float('inf') else 999.0,
                 "n_points": len(L_seg),
-                "provisional": len(L_seg) < MIN_PTS
+                "provisional": prov
             })
             
         history_entry = {
@@ -345,10 +366,12 @@ def run_ml_and_export():
     else:
         # Not enough data for even one segment dynamically, fallback to 1 provisional tier
         c, tot, max_err, _ = fit_cubic_weighted(confirmed_L, confirmed_EndHP)
+        loocv_max, loocv_mean = calc_loocv(confirmed_L, confirmed_EndHP)
         tier_formulas.append({
             "range": [int(confirmed_L[0]) if len(confirmed_L)>0 else 1, int(confirmed_L[-1]) if len(confirmed_L)>0 else 1],
             "coeffs": c if c else [],
             "max_error_pct": round(max_err * 100, 2) if c else 0.0,
+            "loocv_max_pct": round(loocv_max * 100, 2) if loocv_max != float('inf') else 999.0,
             "n_points": len(confirmed_L),
             "provisional": True
         })
