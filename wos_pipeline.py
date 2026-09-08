@@ -15,7 +15,7 @@ def setup_folders():
         os.makedirs("images")
     if not os.path.exists("needs_review.csv"):
         with open("needs_review.csv", "w", encoding="utf-8") as f:
-            f.write("File,Name,Level,Percent,Damage,Confidence,Flag_Reason\n")
+            f.write("File,Level,Percent,Damage,Confidence,Flag_Reason\n")
 
 def optimize_image_for_ocr(img_path):
     img = cv2.imread(img_path)
@@ -105,7 +105,6 @@ def run_ocr(progress_callback=None):
                 
                 entry = {
                     "File": filename,
-                    "Name": name, 
                     "Level": level, 
                     "Percent": percent, 
                     "Damage": damage, 
