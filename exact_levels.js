@@ -1,63 +1,38 @@
-const LAST_UPDATED = 'September 08, 2026 - 10:08:18';
+const LAST_UPDATED = 'September 08, 2026 - 10:17:14';
 const EXTRAPOLATE_A = 591.446648842496;
 const EXTRAPOLATE_B = 4.1807398778742275;
-const TIER_BOUNDARIES = [29, 38, 46];
+const TIER_BOUNDARIES = [34];
+const BOUNDARY_METADATA = {"34": {"stable": false, "pelt_disagree": true, "pelt_suggestions": [39]}};
 const TIER_FORMULAS = [
   {
     "range": [
       21,
-      29
+      34
     ],
     "coeffs": [
-      511217.6959781208,
-      -31959867.718906775,
-      718818604.0508679,
-      -5526202708.430213
+      141649.1459923414,
+      -4882816.297899229,
+      61879299.12207788,
+      -247008060.93600717
     ],
-    "max_error_pct": 1.22,
-    "n_points": 8
+    "max_error_pct": 2.59,
+    "n_points": 12,
+    "provisional": false
   },
   {
     "range": [
-      30,
-      38
-    ],
-    "coeffs": [
-      135888.65676232055,
-      -5839735.851024878,
-      133173400.611999,
-      -1358061300.5758991
-    ],
-    "max_error_pct": 0.06,
-    "n_points": 6
-  },
-  {
-    "range": [
-      39,
-      46
-    ],
-    "coeffs": [
-      276631.62338248524,
-      -21773222.02828776,
-      736503929.7195789,
-      -9006677943.855988
-    ],
-    "max_error_pct": 0.27,
-    "n_points": 8
-  },
-  {
-    "range": [
-      47,
+      36,
       59
     ],
     "coeffs": [
-      -362736.8129279515,
-      77187833.36525813,
-      -4336224090.366043,
-      77216452943.53954
+      254827.21853468296,
+      -18219758.781696904,
+      555867323.4377099,
+      -6075117885.169104
     ],
-    "max_error_pct": 0.11,
-    "n_points": 6
+    "max_error_pct": 0.78,
+    "n_points": 16,
+    "provisional": false
   }
 ];
 const EXACT_LEVELS = {
