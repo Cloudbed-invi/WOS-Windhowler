@@ -1,15 +1,188 @@
 {
-  "A": 591.446648842496,
-  "B": 4.1807398778742275,
+  "ADJACENT_MISMATCHES": [
+    {
+      "Level Pair": "33 -> 34",
+      "End N": 1571026097,
+      "Start N+1": 1560277739,
+      "Mismatch %": 0.689,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "45 -> 46",
+      "End N": 5239205819,
+      "Start N+1": 5271756250,
+      "Mismatch %": 0.617,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "22 -> 23",
+      "End N": 262434268,
+      "Start N+1": 263733911,
+      "Mismatch %": 0.493,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "42 -> 43",
+      "End N": 4004771401,
+      "Start N+1": 4019358690,
+      "Mismatch %": 0.363,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "46 -> 47",
+      "End N": 5731845998,
+      "Start N+1": 5747133410,
+      "Mismatch %": 0.266,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "49 -> 50",
+      "End N": 7397119458,
+      "Start N+1": 7408776394,
+      "Mismatch %": 0.157,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "28 -> 29",
+      "End N": 771016480,
+      "Start N+1": 772043308,
+      "Mismatch %": 0.133,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "39 -> 40",
+      "End N": 3009128283,
+      "Start N+1": 3012795109,
+      "Mismatch %": 0.122,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "41 -> 42",
+      "End N": 3656990551,
+      "Start N+1": 3660540566,
+      "Mismatch %": 0.097,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "40 -> 41",
+      "End N": 3321551770,
+      "Start N+1": 3324664306,
+      "Mismatch %": 0.094,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "50 -> 51",
+      "End N": 8023132040,
+      "Start N+1": 8030588026,
+      "Mismatch %": 0.093,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "32 -> 33",
+      "End N": 1376046040,
+      "Start N+1": 1374803292,
+      "Mismatch %": 0.09,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "31 -> 32",
+      "End N": 1207271366,
+      "Start N+1": 1206376257,
+      "Mismatch %": 0.074,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "38 -> 39",
+      "End N": 2725944552,
+      "Start N+1": 2723989318,
+      "Mismatch %": 0.072,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "44 -> 45",
+      "End N": 4820286103,
+      "Start N+1": 4823692161,
+      "Mismatch %": 0.071,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "25 -> 26",
+      "End N": 458366468,
+      "Start N+1": 458087907,
+      "Mismatch %": 0.061,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "30 -> 31",
+      "End N": 1050135250,
+      "Start N+1": 1049537992,
+      "Mismatch %": 0.057,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "27 -> 28",
+      "End N": 650233599,
+      "Start N+1": 649866656,
+      "Mismatch %": 0.056,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "21 -> 22",
+      "End N": 209061590,
+      "Start N+1": 209161321,
+      "Mismatch %": 0.048,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "47 -> 48",
+      "End N": 6258417981,
+      "Start N+1": 6260921183,
+      "Mismatch %": 0.04,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "48 -> 49",
+      "End N": 6808405534,
+      "Start N+1": 6811019088,
+      "Mismatch %": 0.038,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "43 -> 44",
+      "End N": 4404538107,
+      "Start N+1": 4405871197,
+      "Mismatch %": 0.03,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "29 -> 30",
+      "End N": 905101072,
+      "Start N+1": 904986351,
+      "Mismatch %": 0.013,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "26 -> 27",
+      "End N": 536798049,
+      "Start N+1": 536742898,
+      "Mismatch %": 0.01,
+      "Flagged": false
+    }
+  ],
+  "MISMATCH_THRESHOLD": 3.0,
+  "TOLERANCE_CONFIRMED": 0.15,
+  "TOLERANCE_PROVISIONAL": 0.22,
+  "A": 577.2530710450128,
+  "B": 4.186508406537005,
   "TIER_BOUNDARIES": [
-    34
+    33
   ],
   "BOUNDARY_METADATA": {
-    "34": {
+    "33": {
       "stable": true,
       "pelt_disagree": true,
       "pelt_suggestions": [
-        39
+        38
       ]
     }
   },
@@ -17,33 +190,33 @@
     {
       "range": [
         21,
-        34
+        33
       ],
       "coeffs": [
-        141649.1459923414,
-        -4882816.297899229,
-        61879299.12207788,
-        -247008060.93600717
+        187552.5824317598,
+        -8351637.568890957,
+        148441192.42927882,
+        -960601382.2261816
       ],
-      "max_error_pct": 2.59,
-      "loocv_max_pct": 8.08,
+      "max_error_pct": 2.38,
+      "loocv_max_pct": 7.04,
       "n_points": 12,
       "provisional": true
     },
     {
       "range": [
-        36,
+        34,
         59
       ],
       "coeffs": [
-        254827.21853468296,
-        -18219758.781696904,
-        555867323.4377099,
-        -6075117885.169104
+        269050.2966981456,
+        -20201789.03193678,
+        647030823.9878157,
+        -7458629967.321186
       ],
-      "max_error_pct": 0.78,
-      "loocv_max_pct": 2.36,
-      "n_points": 16,
+      "max_error_pct": 0.79,
+      "loocv_max_pct": 2.21,
+      "n_points": 18,
       "provisional": false
     }
   ]

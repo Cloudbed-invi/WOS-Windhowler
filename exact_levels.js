@@ -1,142 +1,163 @@
-const LAST_UPDATED = 'September 08, 2026 - 10:19:30';
-const EXTRAPOLATE_A = 591.446648842496;
-const EXTRAPOLATE_B = 4.1807398778742275;
-const TIER_BOUNDARIES = [34];
-const BOUNDARY_METADATA = {"34": {"stable": false, "pelt_disagree": true, "pelt_suggestions": [39]}};
+const LAST_UPDATED = 'September 08, 2026 - 12:54:32';
+const EXTRAPOLATE_A = 577.2530710450128;
+const EXTRAPOLATE_B = 4.186508406537005;
+const TIER_BOUNDARIES = [33];
+const BOUNDARY_METADATA = {"33": {"stable": true, "pelt_disagree": true, "pelt_suggestions": [38]}};
+const ADJACENT_MISMATCHES = [{"Level Pair": "33 -> 34", "End N": 1571026097, "Start N+1": 1560277739, "Mismatch %": 0.689, "Flagged": false}, {"Level Pair": "45 -> 46", "End N": 5239205819, "Start N+1": 5271756250, "Mismatch %": 0.617, "Flagged": false}, {"Level Pair": "22 -> 23", "End N": 262434268, "Start N+1": 263733911, "Mismatch %": 0.493, "Flagged": false}, {"Level Pair": "42 -> 43", "End N": 4004771401, "Start N+1": 4019358690, "Mismatch %": 0.363, "Flagged": false}, {"Level Pair": "46 -> 47", "End N": 5731845998, "Start N+1": 5747133410, "Mismatch %": 0.266, "Flagged": false}, {"Level Pair": "49 -> 50", "End N": 7397119458, "Start N+1": 7408776394, "Mismatch %": 0.157, "Flagged": false}, {"Level Pair": "28 -> 29", "End N": 771016480, "Start N+1": 772043308, "Mismatch %": 0.133, "Flagged": false}, {"Level Pair": "39 -> 40", "End N": 3009128283, "Start N+1": 3012795109, "Mismatch %": 0.122, "Flagged": false}, {"Level Pair": "41 -> 42", "End N": 3656990551, "Start N+1": 3660540566, "Mismatch %": 0.097, "Flagged": false}, {"Level Pair": "40 -> 41", "End N": 3321551770, "Start N+1": 3324664306, "Mismatch %": 0.094, "Flagged": false}, {"Level Pair": "50 -> 51", "End N": 8023132040, "Start N+1": 8030588026, "Mismatch %": 0.093, "Flagged": false}, {"Level Pair": "32 -> 33", "End N": 1376046040, "Start N+1": 1374803292, "Mismatch %": 0.09, "Flagged": false}, {"Level Pair": "31 -> 32", "End N": 1207271366, "Start N+1": 1206376257, "Mismatch %": 0.074, "Flagged": false}, {"Level Pair": "38 -> 39", "End N": 2725944552, "Start N+1": 2723989318, "Mismatch %": 0.072, "Flagged": false}, {"Level Pair": "44 -> 45", "End N": 4820286103, "Start N+1": 4823692161, "Mismatch %": 0.071, "Flagged": false}, {"Level Pair": "25 -> 26", "End N": 458366468, "Start N+1": 458087907, "Mismatch %": 0.061, "Flagged": false}, {"Level Pair": "30 -> 31", "End N": 1050135250, "Start N+1": 1049537992, "Mismatch %": 0.057, "Flagged": false}, {"Level Pair": "27 -> 28", "End N": 650233599, "Start N+1": 649866656, "Mismatch %": 0.056, "Flagged": false}, {"Level Pair": "21 -> 22", "End N": 209061590, "Start N+1": 209161321, "Mismatch %": 0.048, "Flagged": false}, {"Level Pair": "47 -> 48", "End N": 6258417981, "Start N+1": 6260921183, "Mismatch %": 0.04, "Flagged": false}, {"Level Pair": "48 -> 49", "End N": 6808405534, "Start N+1": 6811019088, "Mismatch %": 0.038, "Flagged": false}, {"Level Pair": "43 -> 44", "End N": 4404538107, "Start N+1": 4405871197, "Mismatch %": 0.03, "Flagged": false}, {"Level Pair": "29 -> 30", "End N": 905101072, "Start N+1": 904986351, "Mismatch %": 0.013, "Flagged": false}, {"Level Pair": "26 -> 27", "End N": 536798049, "Start N+1": 536742898, "Mismatch %": 0.01, "Flagged": false}];
 const TIER_FORMULAS = [
   {
     "range": [
       21,
-      34
+      33
     ],
     "coeffs": [
-      141649.1459923414,
-      -4882816.297899229,
-      61879299.12207788,
-      -247008060.93600717
+      187552.5824317598,
+      -8351637.568890957,
+      148441192.42927882,
+      -960601382.2261816
     ],
-    "max_error_pct": 2.59,
-    "loocv_max_pct": 8.08,
+    "max_error_pct": 2.38,
+    "loocv_max_pct": 7.04,
     "n_points": 12,
     "provisional": true
   },
   {
     "range": [
-      36,
+      34,
       59
     ],
     "coeffs": [
-      254827.21853468296,
-      -18219758.781696904,
-      555867323.4377099,
-      -6075117885.169104
+      269050.2966981456,
+      -20201789.03193678,
+      647030823.9878157,
+      -7458629967.321186
     ],
-    "max_error_pct": 0.78,
-    "loocv_max_pct": 2.36,
-    "n_points": 16,
+    "max_error_pct": 0.79,
+    "loocv_max_pct": 2.21,
+    "n_points": 18,
     "provisional": false
   }
 ];
 const EXACT_LEVELS = {
   "1": {
-    "start": 0,
-    "window": 24300,
-    "confirmed": true
+    "start": 504,
+    "window": 8680,
+    "confirmed": false,
+    "extrapolated": true
   },
   "2": {
-    "start": 441416,
-    "window": 1322417,
-    "confirmed": false
+    "start": 9184,
+    "window": 40965,
+    "confirmed": false,
+    "extrapolated": true
   },
   "3": {
-    "start": 1763833,
-    "window": 2200673,
-    "confirmed": false
+    "start": 50149,
+    "window": 117082,
+    "confirmed": false,
+    "extrapolated": true
   },
   "4": {
-    "start": 3964506,
-    "window": 3076184,
-    "confirmed": false
+    "start": 167231,
+    "window": 258397,
+    "confirmed": false,
+    "extrapolated": true
   },
   "5": {
-    "start": 7040690,
-    "window": 3948949,
-    "confirmed": false
+    "start": 425628,
+    "window": 487483,
+    "confirmed": false,
+    "extrapolated": true
   },
   "6": {
-    "start": 10989640,
-    "window": 4818969,
-    "confirmed": false
+    "start": 913111,
+    "window": 827882,
+    "confirmed": false,
+    "extrapolated": true
   },
   "7": {
-    "start": 15808609,
-    "window": 5686244,
-    "confirmed": false
+    "start": 1740993,
+    "window": 1303961,
+    "confirmed": false,
+    "extrapolated": true
   },
   "8": {
-    "start": 21494852,
-    "window": 6550773,
-    "confirmed": false
+    "start": 3044954,
+    "window": 1940804,
+    "confirmed": false,
+    "extrapolated": true
   },
   "9": {
-    "start": 28045625,
-    "window": 7412556,
-    "confirmed": false
+    "start": 4985758,
+    "window": 2764128,
+    "confirmed": false,
+    "extrapolated": true
   },
   "10": {
-    "start": 35458181,
-    "window": 8271595,
-    "confirmed": false
+    "start": 7749886,
+    "window": 3800224,
+    "confirmed": false,
+    "extrapolated": true
   },
   "11": {
-    "start": 43729776,
-    "window": 9127888,
-    "confirmed": false
+    "start": 11550110,
+    "window": 5075908,
+    "confirmed": false,
+    "extrapolated": true
   },
   "12": {
-    "start": 52857663,
-    "window": 9981435,
-    "confirmed": false
+    "start": 16626018,
+    "window": 6618476,
+    "confirmed": false,
+    "extrapolated": true
   },
   "13": {
-    "start": 62839098,
-    "window": 10832237,
-    "confirmed": false
+    "start": 23244494,
+    "window": 8455672,
+    "confirmed": false,
+    "extrapolated": true
   },
   "14": {
-    "start": 73671336,
-    "window": 11680294,
-    "confirmed": false
+    "start": 31700166,
+    "window": 10615660,
+    "confirmed": false,
+    "extrapolated": true
   },
   "15": {
-    "start": 85351630,
-    "window": 12525605,
-    "confirmed": false
+    "start": 42315826,
+    "window": 13126994,
+    "confirmed": false,
+    "extrapolated": true
   },
   "16": {
-    "start": 97877235,
-    "window": 13368171,
-    "confirmed": false
+    "start": 55442820,
+    "window": 16018599,
+    "confirmed": false,
+    "extrapolated": true
   },
   "17": {
-    "start": 111245406,
-    "window": 14207992,
-    "confirmed": false
+    "start": 71461419,
+    "window": 19319751,
+    "confirmed": false,
+    "extrapolated": true
   },
   "18": {
-    "start": 125453398,
-    "window": 15045067,
-    "confirmed": false
+    "start": 90781170,
+    "window": 23060061,
+    "confirmed": false,
+    "extrapolated": true
   },
   "19": {
-    "start": 140498465,
-    "window": 15879397,
-    "confirmed": false
+    "start": 113841231,
+    "window": 27269453,
+    "confirmed": false,
+    "extrapolated": true
   },
   "20": {
-    "start": 156377862,
-    "window": 16710981,
-    "confirmed": false
+    "start": 141110684,
+    "window": 31978159,
+    "confirmed": false,
+    "extrapolated": true
   },
   "21": {
     "start": 173088843,
@@ -179,8 +200,8 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "29": {
-    "start": 772045722,
-    "window": 133066318,
+    "start": 772043308,
+    "window": 133057764,
     "confirmed": true
   },
   "30": {
@@ -189,8 +210,8 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "31": {
-    "start": 1049555539,
-    "window": 157727701,
+    "start": 1049537992,
+    "window": 157733374,
     "confirmed": true
   },
   "32": {
@@ -199,9 +220,9 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "33": {
-    "start": 1376981186,
-    "window": 183296553,
-    "confirmed": false
+    "start": 1374803292,
+    "window": 196222805,
+    "confirmed": true
   },
   "34": {
     "start": 1560277739,
@@ -209,8 +230,8 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "35": {
-    "start": 1758916168,
-    "window": 214212663,
+    "start": 1759836443,
+    "window": 213292388,
     "confirmed": false
   },
   "36": {
@@ -284,23 +305,23 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "50": {
-    "start": 7404407377,
-    "window": 619881997,
+    "start": 7408776394,
+    "window": 614355646,
     "confirmed": true
   },
   "51": {
-    "start": 8043861060,
-    "window": 667204546,
-    "confirmed": false
+    "start": 8030588026,
+    "window": 672635538,
+    "confirmed": true
   },
   "52": {
-    "start": 8711065606,
-    "window": 713644255,
+    "start": 8703468390,
+    "window": 715233276,
     "confirmed": false
   },
   "53": {
-    "start": 9424709861,
-    "window": 778772811,
+    "start": 9418701666,
+    "window": 784781006,
     "confirmed": false
   },
   "54": {
@@ -309,23 +330,23 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "55": {
-    "start": 11059658685,
-    "window": 930992049,
+    "start": 11065865262,
+    "window": 930141475,
     "confirmed": false
   },
   "56": {
-    "start": 11990650733,
-    "window": 1002204214,
+    "start": 11996006737,
+    "window": 998250352,
     "confirmed": false
   },
   "57": {
-    "start": 12992854947,
-    "window": 1069812509,
+    "start": 12994257089,
+    "window": 1066709220,
     "confirmed": false
   },
   "58": {
-    "start": 14062667456,
-    "window": 1133816932,
+    "start": 14060966309,
+    "window": 1135518079,
     "confirmed": false
   },
   "59": {
@@ -334,38 +355,38 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "60": {
-    "start": 16065839233,
-    "window": 1149485205,
+    "start": 16055040665,
+    "window": 1150353037,
     "confirmed": false,
     "extrapolated": true
   },
   "61": {
-    "start": 17215324439,
-    "window": 1211011659,
+    "start": 17205393702,
+    "window": 1212040543,
     "confirmed": false,
     "extrapolated": true
   },
   "62": {
-    "start": 18426336098,
-    "window": 1274758865,
+    "start": 18417434245,
+    "window": 1275960608,
     "confirmed": false,
     "extrapolated": true
   },
   "63": {
-    "start": 19701094963,
-    "window": 1340769520,
+    "start": 19693394853,
+    "window": 1342156369,
     "confirmed": false,
     "extrapolated": true
   },
   "64": {
-    "start": 21041864483,
-    "window": 1409086447,
+    "start": 21035551222,
+    "window": 1410671093,
     "confirmed": false,
     "extrapolated": true
   },
   "65": {
-    "start": 22450950930,
-    "window": 1479752589,
+    "start": 22446222315,
+    "window": 1481548171,
     "confirmed": false,
     "extrapolated": true
   }
@@ -1075,5 +1096,50 @@ const RAW_DATA = [
     "Level": 46,
     "Percent": 13.0,
     "Damage": 5331567494
+  },
+  {
+    "Level": 52,
+    "Percent": 5.0,
+    "Damage": 8744569531
+  },
+  {
+    "Level": 51,
+    "Percent": 58.0,
+    "Damage": 8420718627
+  },
+  {
+    "Level": 51,
+    "Percent": 9.0,
+    "Damage": 8087762144
+  },
+  {
+    "Level": 51,
+    "Percent": 0.0,
+    "Damage": 8030587129
+  },
+  {
+    "Level": 50,
+    "Percent": 57.0,
+    "Damage": 7760602853
+  },
+  {
+    "Level": 37,
+    "Percent": 60.0,
+    "Damage": 2353685544
+  },
+  {
+    "Level": 31,
+    "Percent": 14.0,
+    "Damage": 71589812
+  },
+  {
+    "Level": 33,
+    "Percent": 15.0,
+    "Damage": 1404307520
+  },
+  {
+    "Level": 29,
+    "Percent": 56.0,
+    "Damage": 846529318
   }
 ];
