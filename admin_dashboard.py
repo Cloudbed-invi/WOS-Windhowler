@@ -369,14 +369,14 @@ with tab_cov:
             for lvl in levels:
                 d = df_data[df_data["Level"] == lvl]
                 count = len(d)
-                conf = d["Confidence"].mean() if (has_conf and count > 0) else "N/A"
+                conf = round(d["Confidence"].mean(), 3) if (has_conf and count > 0 and not d["Confidence"].isna().all()) else None
                 cov_rows.append({"Level": lvl, "Confirmed Points": count, "Avg Confidence": conf})
 
             df_cov = pd.DataFrame(cov_rows)
             def highlight_low(row):
                 color = 'background-color: #ffcccc; color: #900' if row['Confirmed Points'] < 3 else ''
                 return [color]*len(row)
-            st.dataframe(df_cov.style.apply(highlight_low, axis=1), height=400, use_container_width=True)
+            st.dataframe(df_cov.style.apply(highlight_low, axis=1), height=400, width='stretch')
         else:
             st.write("data.csv is empty.")
     else:
@@ -395,7 +395,7 @@ with tab_cov:
         def highlight_mismatch(row):
             color = 'background-color: #ffcccc; color: #900' if row['Flagged'] else ''
             return [color]*len(row)
-        st.dataframe(df_mis.style.apply(highlight_mismatch, axis=1), use_container_width=True)
+        st.dataframe(df_mis.style.apply(highlight_mismatch, axis=1), width='stretch')
     else:
         st.success("No adjacent pairs found to check.")
 
