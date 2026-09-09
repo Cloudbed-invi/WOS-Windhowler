@@ -9,6 +9,7 @@ from sklearn.linear_model import HuberRegressor
 from scipy.interpolate import PchipInterpolator
 from scipy.optimize import curve_fit
 import cv2
+import re
 import ruptures as rpt
 import time
 
@@ -136,15 +137,14 @@ def run_ocr(progress_callback=None, write_to_csv=True):
         results = reader.readtext(opt_path, detail=1)
         full_text = " ".join([res[1] for res in results])
         
-        damage_match = re.search(r'dealt\s+([\d,]+)\s+damage', full_text, re.IGNORECASE)
-        percent_match = re.search(r'reaching\s+(\d+)%', full_text, re.IGNORECASE)
-        level_match = re.search(r'Lv[.,\s_]*(\d+)', full_text, re.IGNORECASE)
+        # Multi-language robust regexes (English, Polish, French, Spanish, German, etc.)
+        damage_match = re.search(r'(?:dealt|zadac|zadać|inflig|caus|schaden|damage|obrazen|obrażeń|degat|dégât|dano|daño)[^\d]*([\d,\s\.]{4,})', full_text, re.IGNORECASE)
+        percent_match = re.search(r'(\d+)\s*%', full_text, re.IGNORECASE)
+        level_match = re.search(r'(?:Lv|poz|niv|level|nivel)[.,\s_]*(\d+)', full_text, re.IGNORECASE)
         
-        
-
         try:
             damage_str = damage_match.group(1) if damage_match else None
-            damage = int(damage_str.replace(',', '')) if damage_str else None
+            damage = int(re.sub(r'[^\d]', '', damage_str)) if damage_str else None
             percent_str = percent_match.group(1) if percent_match else None
             percent = int(percent_str) if percent_str else None
             level_str = level_match.group(1) if level_match else None
