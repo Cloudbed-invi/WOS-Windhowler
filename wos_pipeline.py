@@ -325,10 +325,14 @@ def run_ml_and_export():
         window_size = model.coef_[0] * 1_000_000
         start_damage = model.intercept_ * 1_000_000
         
+        pct_spread = level_data["Percent"].max() - level_data["Percent"].min()
+        is_strong = bool(pct_spread >= 25.0)
+
         exact_formulas[int(lvl)] = {
             "start": round(start_damage),
             "window": round(window_size),
-            "confirmed": True
+            "confirmed": is_strong,
+            "clustered": not is_strong
         }
     
     df_fit = df[df['Level'] > 1]

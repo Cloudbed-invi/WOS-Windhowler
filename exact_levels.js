@@ -1,4 +1,4 @@
-const LAST_UPDATED = 'September 09, 2026 - 09:17:45';
+const LAST_UPDATED = 'September 09, 2026 - 10:00:36';
 const EXTRAPOLATE_A = 600.3447476143426;
 const EXTRAPOLATE_B = 4.176725688708036;
 const TIER_BOUNDARIES = [32];
@@ -144,7 +144,8 @@ const EXACT_LEVELS = {
   "18": {
     "start": 87494719,
     "window": 25094768,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "19": {
     "start": 112582414,
@@ -159,17 +160,20 @@ const EXACT_LEVELS = {
   "21": {
     "start": 173088843,
     "window": 35972747,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "22": {
     "start": 209274024,
     "window": 52863053,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "23": {
     "start": 263733911,
     "window": 56812891,
-    "confirmed": true
+    "confirmed": false,
+    "clustered": true
   },
   "24": {
     "start": 324605561,
@@ -179,52 +183,62 @@ const EXACT_LEVELS = {
   "25": {
     "start": 389490521,
     "window": 53719746,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "26": {
     "start": 458087907,
     "window": 78710142,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "27": {
     "start": 536742898,
     "window": 113490701,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "28": {
     "start": 649866656,
     "window": 121149824,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "29": {
     "start": 772043308,
     "window": 133057764,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "30": {
     "start": 904986351,
     "window": 145148899,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "31": {
     "start": 1049537992,
     "window": 157733374,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "32": {
     "start": 1206376257,
     "window": 169669783,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "33": {
     "start": 1375907135,
     "window": 185767659,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "34": {
     "start": 1560277739,
     "window": 199034225,
-    "confirmed": true
+    "confirmed": false,
+    "clustered": true
   },
   "35": {
     "start": 1760323906,
@@ -234,82 +248,98 @@ const EXACT_LEVELS = {
   "36": {
     "start": 1973111837,
     "window": 230964862,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "37": {
     "start": 2203423279,
     "window": 250459368,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "38": {
     "start": 2451976565,
     "window": 273967987,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "39": {
     "start": 2723989318,
     "window": 285138965,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "40": {
     "start": 3012795109,
     "window": 308756661,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "41": {
     "start": 3324664306,
     "window": 332326245,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "42": {
     "start": 3660540566,
     "window": 344230835,
-    "confirmed": true
+    "confirmed": false,
+    "clustered": true
   },
   "43": {
     "start": 4019358690,
     "window": 385179417,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "44": {
     "start": 4405871197,
     "window": 414414906,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "45": {
     "start": 4823692161,
     "window": 415513658,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "46": {
     "start": 5271756250,
     "window": 460089748,
-    "confirmed": true
+    "confirmed": false,
+    "clustered": true
   },
   "47": {
     "start": 5747133410,
     "window": 511284571,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "48": {
     "start": 6260921183,
     "window": 547484351,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "49": {
     "start": 6811019088,
     "window": 586100370,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "50": {
     "start": 7408776394,
     "window": 614355646,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "51": {
     "start": 8030588026,
     "window": 672635538,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "52": {
     "start": 8703468390,
@@ -324,7 +354,8 @@ const EXACT_LEVELS = {
   "54": {
     "start": 10203482672,
     "window": 822005214,
-    "confirmed": true
+    "confirmed": true,
+    "clustered": false
   },
   "55": {
     "start": 11065865262,
@@ -349,7 +380,8 @@ const EXACT_LEVELS = {
   "59": {
     "start": 15196484388,
     "window": 374135904,
-    "confirmed": true
+    "confirmed": false,
+    "clustered": true
   },
   "60": {
     "start": 16041712227,

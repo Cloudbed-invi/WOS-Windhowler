@@ -489,7 +489,7 @@
     }
 
     // 0. Exact ML Data (Old Model - Huber / Interpolated)
-    let exactLvl = null, exactPct = null, exactConfirmed = false, exactExtrapolated = false;
+    let exactLvl = null, exactPct = null, exactConfirmed = false, exactExtrapolated = false, exactClustered = false;
     if (typeof EXACT_LEVELS !== 'undefined') {
       const sortedKeys = Object.keys(EXACT_LEVELS).map(Number).sort((a,b)=>a-b);
       for (const lvl of sortedKeys) {
@@ -500,6 +500,7 @@
           exactPct = (dmg - data.start) / data.window;
           exactConfirmed = data.confirmed;
           if (data.extrapolated) exactExtrapolated = true;
+          if (data.clustered) exactClustered = true;
           break;
         }
       }
@@ -539,11 +540,13 @@
     let exactStr = (exactLvl !== null) ? `Lv. ${exactLvl} <span style="font-size:14px;color:var(--text);">at</span> ${(exactPct*100).toFixed(1)}%` : 'Not available';
     let exactBadge = '';
     if (exactExtrapolated) {
-        exactBadge = `<span style="font-size:11px; padding:3px 8px; border-radius:12px; background:#9e9e9e; color:white; margin-left:10px; font-weight:600;">Extrapolated</span>`;
+        exactBadge = `<span class="badge badge-extrapolated" style="margin-left:10px;">Extrapolated</span>`;
+    } else if (exactClustered) {
+        exactBadge = `<span class="badge badge-extrapolated" style="margin-left:10px;">Provisional (Clustered)</span>`;
     } else if (exactConfirmed) {
-        exactBadge = `<span style="font-size:11px; padding:3px 8px; border-radius:12px; background:#4caf50; color:white; margin-left:10px; font-weight:600;">Verified (Huber)</span>`;
+        exactBadge = `<span class="badge badge-verified" style="margin-left:10px;">Verified (Huber)</span>`;
     } else {
-        exactBadge = `<span style="font-size:11px; padding:3px 8px; border-radius:12px; background:#2196f3; color:white; margin-left:10px; font-weight:600;">Interpolated</span>`;
+        exactBadge = `<span class="badge badge-interpolated" style="margin-left:10px;">Interpolated</span>`;
     }
     
     html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; align-items:center; font-size:16px; border-bottom: 2px solid #eee; padding-bottom: 12px;">
