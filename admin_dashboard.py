@@ -370,11 +370,38 @@ with tab_cov:
                 d = df_data[df_data["Level"] == lvl]
                 count = len(d)
                 conf = round(d["Confidence"].mean(), 3) if (has_conf and count > 0 and not d["Confidence"].isna().all()) else None
-                cov_rows.append({"Level": lvl, "Confirmed Points": count, "Avg Confidence": conf})
+                
+                status = "No Data"
+                spread = 0.0
+                if count > 0:
+                    unique_pcts = d["Percent"].nunique()
+                    if unique_pcts < 2:
+                        status = "Unverifiable (Need >1 pt)"
+                    else:
+                        spread = d["Percent"].max() - d["Percent"].min()
+                        if spread >= 25.0:
+                            status = "Verified (Strong)"
+                        else:
+                            status = "Provisional (Clustered)"
+                            
+                cov_rows.append({
+                    "Level": lvl, 
+                    "Status": status,
+                    "Spread (%)": f"{spread:.1f}%" if count > 1 else "-",
+                    "Confirmed Points": count, 
+                    "Avg Confidence": conf
+                })
 
             df_cov = pd.DataFrame(cov_rows)
             def highlight_low(row):
-                color = 'background-color: #ffcccc; color: #900' if row['Confirmed Points'] < 3 else ''
+                if row['Status'] == 'No Data' or row['Status'].startswith('Unverifiable'):
+                    color = 'background-color: #ffcccc; color: #900'
+                elif row['Status'] == 'Provisional (Clustered)':
+                    color = 'background-color: #fff3cd; color: #856404'
+                elif row['Status'] == 'Verified (Strong)':
+                    color = 'background-color: #d4edda; color: #155724'
+                else:
+                    color = ''
                 return [color]*len(row)
             st.dataframe(df_cov.style.apply(highlight_low, axis=1), height=400, width='stretch')
         else:
