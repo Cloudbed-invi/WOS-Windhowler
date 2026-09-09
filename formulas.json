@@ -1,6 +1,13 @@
 {
   "ADJACENT_MISMATCHES": [
     {
+      "Level Pair": "25 -> 26",
+      "End N": 443210267,
+      "Start N+1": 458087907,
+      "Mismatch %": 3.248,
+      "Flagged": true
+    },
+    {
       "Level Pair": "33 -> 34",
       "End N": 1571026097,
       "Start N+1": 1560277739,
@@ -16,9 +23,9 @@
     },
     {
       "Level Pair": "22 -> 23",
-      "End N": 262434268,
+      "End N": 262137077,
       "Start N+1": 263733911,
-      "Mismatch %": 0.493,
+      "Mismatch %": 0.605,
       "Flagged": false
     },
     {
@@ -57,6 +64,13 @@
       "Flagged": false
     },
     {
+      "Level Pair": "21 -> 22",
+      "End N": 209061590,
+      "Start N+1": 209274024,
+      "Mismatch %": 0.102,
+      "Flagged": false
+    },
+    {
       "Level Pair": "41 -> 42",
       "End N": 3656990551,
       "Start N+1": 3660540566,
@@ -85,6 +99,13 @@
       "Flagged": false
     },
     {
+      "Level Pair": "37 -> 38",
+      "End N": 2453882647,
+      "Start N+1": 2451976565,
+      "Mismatch %": 0.078,
+      "Flagged": false
+    },
+    {
       "Level Pair": "31 -> 32",
       "End N": 1207271366,
       "Start N+1": 1206376257,
@@ -106,13 +127,6 @@
       "Flagged": false
     },
     {
-      "Level Pair": "25 -> 26",
-      "End N": 458366468,
-      "Start N+1": 458087907,
-      "Mismatch %": 0.061,
-      "Flagged": false
-    },
-    {
       "Level Pair": "30 -> 31",
       "End N": 1050135250,
       "Start N+1": 1049537992,
@@ -127,13 +141,6 @@
       "Flagged": false
     },
     {
-      "Level Pair": "21 -> 22",
-      "End N": 209061590,
-      "Start N+1": 209161321,
-      "Mismatch %": 0.048,
-      "Flagged": false
-    },
-    {
       "Level Pair": "47 -> 48",
       "End N": 6258417981,
       "Start N+1": 6260921183,
@@ -145,6 +152,13 @@
       "End N": 6808405534,
       "Start N+1": 6811019088,
       "Mismatch %": 0.038,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "36 -> 37",
+      "End N": 2204076699,
+      "Start N+1": 2203423279,
+      "Mismatch %": 0.03,
       "Flagged": false
     },
     {
@@ -172,51 +186,51 @@
   "MISMATCH_THRESHOLD": 3.0,
   "TOLERANCE_CONFIRMED": 0.15,
   "TOLERANCE_PROVISIONAL": 0.22,
-  "A": 577.2530710450128,
-  "B": 4.186508406537005,
+  "A": 599.3004144696129,
+  "B": 4.177161723758375,
   "TIER_BOUNDARIES": [
-    33
+    32
   ],
   "BOUNDARY_METADATA": {
-    "33": {
+    "32": {
       "stable": true,
       "pelt_disagree": true,
       "pelt_suggestions": [
-        38
+        36
       ]
     }
   },
   "TIER_FORMULAS": [
     {
       "range": [
-        21,
-        33
+        18,
+        32
       ],
       "coeffs": [
-        187552.5824317598,
-        -8351637.568890957,
-        148441192.42927882,
-        -960601382.2261816
+        186082.8845908981,
+        -7905156.2730586585,
+        128662306.17512661,
+        -727337186.619556
       ],
-      "max_error_pct": 2.38,
-      "loocv_max_pct": 7.04,
+      "max_error_pct": 2.9,
+      "loocv_max_pct": 8.93,
       "n_points": 12,
       "provisional": true
     },
     {
       "range": [
-        34,
+        33,
         59
       ],
       "coeffs": [
-        269050.2966981456,
-        -20201789.03193678,
-        647030823.9878157,
-        -7458629967.321186
+        261298.87154726082,
+        -19153689.18700633,
+        600483672.5290339,
+        -6779668714.899909
       ],
-      "max_error_pct": 0.79,
-      "loocv_max_pct": 2.21,
-      "n_points": 18,
+      "max_error_pct": 0.78,
+      "loocv_max_pct": 1.65,
+      "n_points": 20,
       "provisional": false
     }
   ]
