@@ -8,13 +8,6 @@
       "Flagged": true
     },
     {
-      "Level Pair": "33 -> 34",
-      "End N": 1571026097,
-      "Start N+1": 1560277739,
-      "Mismatch %": 0.689,
-      "Flagged": false
-    },
-    {
       "Level Pair": "45 -> 46",
       "End N": 5239205819,
       "Start N+1": 5271756250,
@@ -92,9 +85,9 @@
       "Flagged": false
     },
     {
-      "Level Pair": "32 -> 33",
-      "End N": 1376046040,
-      "Start N+1": 1374803292,
+      "Level Pair": "33 -> 34",
+      "End N": 1561674794,
+      "Start N+1": 1560277739,
       "Mismatch %": 0.09,
       "Flagged": false
     },
@@ -181,13 +174,20 @@
       "Start N+1": 536742898,
       "Mismatch %": 0.01,
       "Flagged": false
+    },
+    {
+      "Level Pair": "32 -> 33",
+      "End N": 1376046040,
+      "Start N+1": 1375907135,
+      "Mismatch %": 0.01,
+      "Flagged": false
     }
   ],
   "MISMATCH_THRESHOLD": 3.0,
   "TOLERANCE_CONFIRMED": 0.15,
   "TOLERANCE_PROVISIONAL": 0.22,
-  "A": 599.3004144696129,
-  "B": 4.177161723758375,
+  "A": 600.3447476143426,
+  "B": 4.176725688708036,
   "TIER_BOUNDARIES": [
     32
   ],
@@ -223,13 +223,13 @@
         59
       ],
       "coeffs": [
-        261298.87154726082,
-        -19153689.18700633,
-        600483672.5290339,
-        -6779668714.899909
+        267878.86824516923,
+        -20051936.621058334,
+        640817100.6649009,
+        -7375509968.963728
       ],
-      "max_error_pct": 0.78,
-      "loocv_max_pct": 1.65,
+      "max_error_pct": 0.79,
+      "loocv_max_pct": 1.85,
       "n_points": 20,
       "provisional": false
     }

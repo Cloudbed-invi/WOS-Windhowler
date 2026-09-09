@@ -1,9 +1,9 @@
-const LAST_UPDATED = 'September 09, 2026 - 09:13:55';
-const EXTRAPOLATE_A = 599.3004144696129;
-const EXTRAPOLATE_B = 4.177161723758375;
+const LAST_UPDATED = 'September 09, 2026 - 09:17:45';
+const EXTRAPOLATE_A = 600.3447476143426;
+const EXTRAPOLATE_B = 4.176725688708036;
 const TIER_BOUNDARIES = [32];
 const BOUNDARY_METADATA = {"32": {"stable": true, "pelt_disagree": true, "pelt_suggestions": [36]}};
-const ADJACENT_MISMATCHES = [{"Level Pair": "25 -> 26", "End N": 443210267, "Start N+1": 458087907, "Mismatch %": 3.248, "Flagged": true}, {"Level Pair": "33 -> 34", "End N": 1571026097, "Start N+1": 1560277739, "Mismatch %": 0.689, "Flagged": false}, {"Level Pair": "45 -> 46", "End N": 5239205819, "Start N+1": 5271756250, "Mismatch %": 0.617, "Flagged": false}, {"Level Pair": "22 -> 23", "End N": 262137077, "Start N+1": 263733911, "Mismatch %": 0.605, "Flagged": false}, {"Level Pair": "42 -> 43", "End N": 4004771401, "Start N+1": 4019358690, "Mismatch %": 0.363, "Flagged": false}, {"Level Pair": "46 -> 47", "End N": 5731845998, "Start N+1": 5747133410, "Mismatch %": 0.266, "Flagged": false}, {"Level Pair": "49 -> 50", "End N": 7397119458, "Start N+1": 7408776394, "Mismatch %": 0.157, "Flagged": false}, {"Level Pair": "28 -> 29", "End N": 771016480, "Start N+1": 772043308, "Mismatch %": 0.133, "Flagged": false}, {"Level Pair": "39 -> 40", "End N": 3009128283, "Start N+1": 3012795109, "Mismatch %": 0.122, "Flagged": false}, {"Level Pair": "21 -> 22", "End N": 209061590, "Start N+1": 209274024, "Mismatch %": 0.102, "Flagged": false}, {"Level Pair": "41 -> 42", "End N": 3656990551, "Start N+1": 3660540566, "Mismatch %": 0.097, "Flagged": false}, {"Level Pair": "40 -> 41", "End N": 3321551770, "Start N+1": 3324664306, "Mismatch %": 0.094, "Flagged": false}, {"Level Pair": "50 -> 51", "End N": 8023132040, "Start N+1": 8030588026, "Mismatch %": 0.093, "Flagged": false}, {"Level Pair": "32 -> 33", "End N": 1376046040, "Start N+1": 1374803292, "Mismatch %": 0.09, "Flagged": false}, {"Level Pair": "37 -> 38", "End N": 2453882647, "Start N+1": 2451976565, "Mismatch %": 0.078, "Flagged": false}, {"Level Pair": "31 -> 32", "End N": 1207271366, "Start N+1": 1206376257, "Mismatch %": 0.074, "Flagged": false}, {"Level Pair": "38 -> 39", "End N": 2725944552, "Start N+1": 2723989318, "Mismatch %": 0.072, "Flagged": false}, {"Level Pair": "44 -> 45", "End N": 4820286103, "Start N+1": 4823692161, "Mismatch %": 0.071, "Flagged": false}, {"Level Pair": "30 -> 31", "End N": 1050135250, "Start N+1": 1049537992, "Mismatch %": 0.057, "Flagged": false}, {"Level Pair": "27 -> 28", "End N": 650233599, "Start N+1": 649866656, "Mismatch %": 0.056, "Flagged": false}, {"Level Pair": "47 -> 48", "End N": 6258417981, "Start N+1": 6260921183, "Mismatch %": 0.04, "Flagged": false}, {"Level Pair": "48 -> 49", "End N": 6808405534, "Start N+1": 6811019088, "Mismatch %": 0.038, "Flagged": false}, {"Level Pair": "36 -> 37", "End N": 2204076699, "Start N+1": 2203423279, "Mismatch %": 0.03, "Flagged": false}, {"Level Pair": "43 -> 44", "End N": 4404538107, "Start N+1": 4405871197, "Mismatch %": 0.03, "Flagged": false}, {"Level Pair": "29 -> 30", "End N": 905101072, "Start N+1": 904986351, "Mismatch %": 0.013, "Flagged": false}, {"Level Pair": "26 -> 27", "End N": 536798049, "Start N+1": 536742898, "Mismatch %": 0.01, "Flagged": false}];
+const ADJACENT_MISMATCHES = [{"Level Pair": "25 -> 26", "End N": 443210267, "Start N+1": 458087907, "Mismatch %": 3.248, "Flagged": true}, {"Level Pair": "45 -> 46", "End N": 5239205819, "Start N+1": 5271756250, "Mismatch %": 0.617, "Flagged": false}, {"Level Pair": "22 -> 23", "End N": 262137077, "Start N+1": 263733911, "Mismatch %": 0.605, "Flagged": false}, {"Level Pair": "42 -> 43", "End N": 4004771401, "Start N+1": 4019358690, "Mismatch %": 0.363, "Flagged": false}, {"Level Pair": "46 -> 47", "End N": 5731845998, "Start N+1": 5747133410, "Mismatch %": 0.266, "Flagged": false}, {"Level Pair": "49 -> 50", "End N": 7397119458, "Start N+1": 7408776394, "Mismatch %": 0.157, "Flagged": false}, {"Level Pair": "28 -> 29", "End N": 771016480, "Start N+1": 772043308, "Mismatch %": 0.133, "Flagged": false}, {"Level Pair": "39 -> 40", "End N": 3009128283, "Start N+1": 3012795109, "Mismatch %": 0.122, "Flagged": false}, {"Level Pair": "21 -> 22", "End N": 209061590, "Start N+1": 209274024, "Mismatch %": 0.102, "Flagged": false}, {"Level Pair": "41 -> 42", "End N": 3656990551, "Start N+1": 3660540566, "Mismatch %": 0.097, "Flagged": false}, {"Level Pair": "40 -> 41", "End N": 3321551770, "Start N+1": 3324664306, "Mismatch %": 0.094, "Flagged": false}, {"Level Pair": "50 -> 51", "End N": 8023132040, "Start N+1": 8030588026, "Mismatch %": 0.093, "Flagged": false}, {"Level Pair": "33 -> 34", "End N": 1561674794, "Start N+1": 1560277739, "Mismatch %": 0.09, "Flagged": false}, {"Level Pair": "37 -> 38", "End N": 2453882647, "Start N+1": 2451976565, "Mismatch %": 0.078, "Flagged": false}, {"Level Pair": "31 -> 32", "End N": 1207271366, "Start N+1": 1206376257, "Mismatch %": 0.074, "Flagged": false}, {"Level Pair": "38 -> 39", "End N": 2725944552, "Start N+1": 2723989318, "Mismatch %": 0.072, "Flagged": false}, {"Level Pair": "44 -> 45", "End N": 4820286103, "Start N+1": 4823692161, "Mismatch %": 0.071, "Flagged": false}, {"Level Pair": "30 -> 31", "End N": 1050135250, "Start N+1": 1049537992, "Mismatch %": 0.057, "Flagged": false}, {"Level Pair": "27 -> 28", "End N": 650233599, "Start N+1": 649866656, "Mismatch %": 0.056, "Flagged": false}, {"Level Pair": "47 -> 48", "End N": 6258417981, "Start N+1": 6260921183, "Mismatch %": 0.04, "Flagged": false}, {"Level Pair": "48 -> 49", "End N": 6808405534, "Start N+1": 6811019088, "Mismatch %": 0.038, "Flagged": false}, {"Level Pair": "36 -> 37", "End N": 2204076699, "Start N+1": 2203423279, "Mismatch %": 0.03, "Flagged": false}, {"Level Pair": "43 -> 44", "End N": 4404538107, "Start N+1": 4405871197, "Mismatch %": 0.03, "Flagged": false}, {"Level Pair": "29 -> 30", "End N": 905101072, "Start N+1": 904986351, "Mismatch %": 0.013, "Flagged": false}, {"Level Pair": "26 -> 27", "End N": 536798049, "Start N+1": 536742898, "Mismatch %": 0.01, "Flagged": false}, {"Level Pair": "32 -> 33", "End N": 1376046040, "Start N+1": 1375907135, "Mismatch %": 0.01, "Flagged": false}];
 const TIER_FORMULAS = [
   {
     "range": [
@@ -27,117 +27,117 @@ const TIER_FORMULAS = [
       59
     ],
     "coeffs": [
-      261298.87154726082,
-      -19153689.18700633,
-      600483672.5290339,
-      -6779668714.899909
+      267878.86824516923,
+      -20051936.621058334,
+      640817100.6649009,
+      -7375509968.963728
     ],
-    "max_error_pct": 0.78,
-    "loocv_max_pct": 1.65,
+    "max_error_pct": 0.79,
+    "loocv_max_pct": 1.85,
     "n_points": 20,
     "provisional": false
   }
 ];
 const EXACT_LEVELS = {
   "1": {
-    "start": 499,
-    "window": 8537,
+    "start": 500,
+    "window": 8544,
     "confirmed": false,
     "extrapolated": true
   },
   "2": {
-    "start": 9036,
-    "window": 40113,
+    "start": 9044,
+    "window": 40144,
     "confirmed": false,
     "extrapolated": true
   },
   "3": {
-    "start": 49149,
-    "window": 114310,
+    "start": 49188,
+    "window": 114378,
     "confirmed": false,
     "extrapolated": true
   },
   "4": {
-    "start": 163459,
-    "window": 251702,
+    "start": 163566,
+    "window": 251827,
     "confirmed": false,
     "extrapolated": true
   },
   "5": {
-    "start": 415161,
-    "window": 473977,
+    "start": 415393,
+    "window": 474171,
     "confirmed": false,
     "extrapolated": true
   },
   "6": {
-    "start": 889138,
-    "window": 803705,
+    "start": 889564,
+    "window": 803977,
     "confirmed": false,
     "extrapolated": true
   },
   "7": {
-    "start": 1692843,
-    "window": 1264206,
+    "start": 1693541,
+    "window": 1264554,
     "confirmed": false,
     "extrapolated": true
   },
   "8": {
-    "start": 2957049,
-    "window": 1879447,
+    "start": 2958095,
+    "window": 1879863,
     "confirmed": false,
     "extrapolated": true
   },
   "9": {
-    "start": 4836496,
-    "window": 2673977,
+    "start": 4837958,
+    "window": 2674440,
     "confirmed": false,
     "extrapolated": true
   },
   "10": {
-    "start": 7510473,
-    "window": 3672860,
+    "start": 7512398,
+    "window": 3673336,
     "confirmed": false,
     "extrapolated": true
   },
   "11": {
-    "start": 11183333,
-    "window": 4901634,
+    "start": 11185734,
+    "window": 4902077,
     "confirmed": false,
     "extrapolated": true
   },
   "12": {
-    "start": 16084967,
-    "window": 6386277,
+    "start": 16087811,
+    "window": 6386622,
     "confirmed": false,
     "extrapolated": true
   },
   "13": {
-    "start": 22471244,
-    "window": 8153167,
+    "start": 22474433,
+    "window": 8153334,
     "confirmed": false,
     "extrapolated": true
   },
   "14": {
-    "start": 30624411,
-    "window": 10229061,
+    "start": 30627767,
+    "window": 10228953,
     "confirmed": false,
     "extrapolated": true
   },
   "15": {
-    "start": 40853472,
-    "window": 12641071,
+    "start": 40856720,
+    "window": 12640570,
     "confirmed": false,
     "extrapolated": true
   },
   "16": {
-    "start": 53494543,
-    "window": 15416642,
+    "start": 53497290,
+    "window": 15415612,
     "confirmed": false,
     "extrapolated": true
   },
   "17": {
-    "start": 68911185,
-    "window": 18583534,
+    "start": 68912902,
+    "window": 18581817,
     "confirmed": false,
     "extrapolated": true
   },
@@ -217,8 +217,8 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "33": {
-    "start": 1374803292,
-    "window": 196222805,
+    "start": 1375907135,
+    "window": 185767659,
     "confirmed": true
   },
   "34": {
@@ -227,8 +227,8 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "35": {
-    "start": 1760492458,
-    "window": 212619379,
+    "start": 1760323906,
+    "window": 212787931,
     "confirmed": false
   },
   "36": {
@@ -352,38 +352,38 @@ const EXACT_LEVELS = {
     "confirmed": true
   },
   "60": {
-    "start": 16042421402,
-    "window": 1146793021,
+    "start": 16041712227,
+    "window": 1146618443,
     "confirmed": false,
     "extrapolated": true
   },
   "61": {
-    "start": 17189214424,
-    "window": 1208104515,
+    "start": 17188330670,
+    "window": 1207911969,
     "confirmed": false,
     "extrapolated": true
   },
   "62": {
-    "start": 18397318938,
-    "window": 1271625306,
+    "start": 18396242640,
+    "window": 1271413696,
     "confirmed": false,
     "extrapolated": true
   },
   "63": {
-    "start": 19668944244,
-    "window": 1337397743,
+    "start": 19667656336,
+    "window": 1337165934,
     "confirmed": false,
     "extrapolated": true
   },
   "64": {
-    "start": 21006341987,
-    "window": 1405464293,
+    "start": 21004822269,
+    "window": 1405211113,
     "confirmed": false,
     "extrapolated": true
   },
   "65": {
-    "start": 22411806279,
-    "window": 1475867543,
+    "start": 22410033382,
+    "window": 1475591783,
     "confirmed": false,
     "extrapolated": true
   }
@@ -1293,5 +1293,10 @@ const RAW_DATA = [
     "Level": 11,
     "Percent": 49.0,
     "Damage": 13348602
+  },
+  {
+    "Level": 33,
+    "Percent": 60.0,
+    "Damage": 1487367636
   }
 ];
