@@ -36,6 +36,13 @@
       "Flagged": false
     },
     {
+      "Level Pair": "16 -> 17",
+      "End N": 66115263,
+      "Start N+1": 66240785,
+      "Mismatch %": 0.189,
+      "Flagged": false
+    },
+    {
       "Level Pair": "49 -> 50",
       "End N": 7397119458,
       "Start N+1": 7408776394,
@@ -96,6 +103,13 @@
       "End N": 2453882647,
       "Start N+1": 2451976565,
       "Mismatch %": 0.078,
+      "Flagged": false
+    },
+    {
+      "Level Pair": "17 -> 18",
+      "End N": 87562047,
+      "Start N+1": 87494719,
+      "Mismatch %": 0.077,
       "Flagged": false
     },
     {
@@ -186,51 +200,51 @@
   "MISMATCH_THRESHOLD": 3.0,
   "TOLERANCE_CONFIRMED": 0.15,
   "TOLERANCE_PROVISIONAL": 0.22,
-  "A": 600.3447476143426,
-  "B": 4.176725688708036,
+  "A": 600.2377051669254,
+  "B": 4.1767707249038555,
   "TIER_BOUNDARIES": [
-    32
+    30
   ],
   "BOUNDARY_METADATA": {
-    "32": {
-      "stable": true,
+    "30": {
+      "stable": false,
       "pelt_disagree": true,
       "pelt_suggestions": [
-        36
+        33
       ]
     }
   },
   "TIER_FORMULAS": [
     {
       "range": [
-        18,
-        32
+        16,
+        30
       ],
       "coeffs": [
-        186082.8845908981,
-        -7905156.2730586585,
-        128662306.17512661,
-        -727337186.619556
+        215721.66699971948,
+        -9869526.203416424,
+        171513728.67224696,
+        -1035260953.4861968
       ],
-      "max_error_pct": 2.9,
-      "loocv_max_pct": 8.93,
+      "max_error_pct": 2.61,
+      "loocv_max_pct": 3.26,
       "n_points": 12,
       "provisional": true
     },
     {
       "range": [
-        33,
+        31,
         59
       ],
       "coeffs": [
-        267878.86824516923,
-        -20051936.621058334,
-        640817100.6649009,
-        -7375509968.963728
+        262889.43079083983,
+        -19396029.109238613,
+        612540744.822126,
+        -6975716102.405213
       ],
       "max_error_pct": 0.79,
-      "loocv_max_pct": 1.85,
-      "n_points": 20,
+      "loocv_max_pct": 1.28,
+      "n_points": 22,
       "provisional": false
     }
   ]
